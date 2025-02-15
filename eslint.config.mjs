@@ -4,6 +4,7 @@ export default antfu(
   {
     ignores: [
       'README.md',
+      'public/*',
     ],
     react: true,
     typescript: {
