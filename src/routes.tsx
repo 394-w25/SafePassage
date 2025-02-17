@@ -1,14 +1,14 @@
 import { Layout, LoadingCircle, ProtectedRoute } from '@/components/common'
 import Home from '@/pages/Home'
-
-import { Box } from '@mui/material'
-
+import Me from '@/pages/Me'
+import Onboarding from '@/pages/Onboarding'
+import { useUserStore } from '@/stores'
+import Box from '@mui/material/Box'
 import { Route, Routes } from 'react-router-dom'
-import Me from './pages/Me'
-import { useUserStore } from './stores'
 
 const AppRoutes = () => {
   const routeConfig = [
+    { path: '/onboarding', element: <Onboarding /> },
     { path: '/user', element: <Me /> },
   ]
 
