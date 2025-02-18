@@ -1,5 +1,25 @@
 type UserType = 'admin' | 'user'
 
+interface HealthInfos {
+  allergies?: string[]
+  medicalConditions?: string[]
+  pastSurgeries?: string[]
+  medicalDevices?: string[]
+}
+
+interface Contact {
+  id: number
+  name: string
+  relationship: string
+  phone: string
+}
+
+interface HealthData {
+  dateOfBirth: Date
+  healthInfos?: HealthInfos
+  contacts?: Contact[]
+}
+
 interface UserProfile {
   uid: string
   name: string
@@ -7,4 +27,6 @@ interface UserProfile {
   profilePic: string
   createdAt: string
   role: UserType
+  onboarded: boolean
+  healthData?: HealthData
 }

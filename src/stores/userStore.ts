@@ -89,7 +89,12 @@ const useUserStore = create<UserState>()(
         try {
           await updateDocument(currentUser.uid, 'users', updates)
           set({ user: { ...currentUser, ...updates } })
-          toast.success('Profile updated successfully!')
+          if (updates.onboarded) {
+            toast.success('Profile setup completed!\nYou can now access your dashboard.')
+          }
+          else {
+            toast.success('Profile updated successfully!')
+          }
         }
         catch (error) {
           console.error('Error updating profile:', error)

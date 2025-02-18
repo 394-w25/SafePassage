@@ -3,6 +3,7 @@ import LoadingCircle from '@/components/common/LoadingCircle'
 import { useIsOnboarding } from '@/hooks'
 import { useUserStore } from '@/stores'
 import { Typography } from '@mui/material'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface ProtectedRouteProps {
@@ -15,19 +16,32 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps) => {
   const isOnboarding = useIsOnboarding()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    // Avoid navigating while still loading
+    if (loading) {
+      return
+    }
+
+    if (!user) {
+      if (isOnboarding) {
+        void navigate('/', { replace: true })
+      }
+      return
+    }
+
+    if (user.onboarded === undefined || user.onboarded === false) {
+      void navigate('/onboarding', { replace: true })
+    }
+    else if (isOnboarding) {
+      void navigate('/', { replace: true })
+    }
+  }, [user, isOnboarding, loading, navigate])
+
   if (loading) {
     return <LoadingCircle />
   }
 
   if (!user) {
-    if (isOnboarding) {
-      try {
-        void navigate('/')
-      }
-      catch (error) {
-        console.error('Navigation error:', error)
-      }
-    }
     return (
       <Typography
         variant="h6"
