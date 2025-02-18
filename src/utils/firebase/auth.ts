@@ -1,17 +1,14 @@
-import type { NavigateFunction } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 
 import { auth } from './firebaseConfig'
 import getUserProfile from './userProfile'
 
-const loginUser = async (
-  navigate: NavigateFunction,
-): Promise<UserProfile | undefined> => {
+const loginUser = async (): Promise<UserProfile | undefined> => {
   try {
     const provider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, provider)
 
-    const userProfile = await getUserProfile(result.user, navigate)
+    const userProfile = await getUserProfile(result.user)
     return userProfile
   }
   catch (error) {
@@ -20,13 +17,14 @@ const loginUser = async (
   }
 }
 
-const logoutUser = async (navigate: NavigateFunction): Promise<void> => {
+const logoutUser = async (): Promise<boolean> => {
   try {
     await signOut(auth)
-    await navigate('/')
+    return true
   }
   catch (error) {
     console.error('Error during sign-out:', error)
+    return false
   }
 }
 

@@ -43,10 +43,11 @@ const useUserStore = create<UserState>()(
       login: async (navigate) => {
         try {
           set({ loading: true, error: null })
-          const profile = await loginUser(navigate)
+          const profile = await loginUser()
 
           if (profile) {
             set({ user: { ...profile } })
+            await navigate('/')
           }
         }
         catch (error) {
@@ -62,10 +63,11 @@ const useUserStore = create<UserState>()(
       logout: async (navigate) => {
         try {
           set({ loading: true, error: null })
-          await logoutUser(navigate)
+          await logoutUser()
 
           set({ user: undefined })
           toast.success('Logged out successfully.')
+          await navigate('/')
         }
         catch (error) {
           console.error('Error during logout:', error)
@@ -87,7 +89,12 @@ const useUserStore = create<UserState>()(
         try {
           await updateDocument(currentUser.uid, 'users', updates)
           set({ user: { ...currentUser, ...updates } })
-          toast.success('Profile updated successfully!')
+          if (updates.onboarded) {
+            toast.success('Profile setup completed!\nYou can now access your dashboard.')
+          }
+          else {
+            toast.success('Profile updated successfully!')
+          }
         }
         catch (error) {
           console.error('Error updating profile:', error)
