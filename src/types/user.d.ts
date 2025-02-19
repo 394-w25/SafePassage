@@ -15,7 +15,7 @@ interface Contact {
 }
 
 interface HealthData {
-  dateOfBirth: Date
+  dateOfBirth: string
   healthInfos?: HealthInfos
   contacts?: Contact[]
 }

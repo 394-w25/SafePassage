@@ -1,5 +1,5 @@
 import { useUserStore } from '@/stores'
-import { formatTitleCase } from '@/utils/onboardingUtils'
+import { calculateAge, formatTitleCase } from '@/utils/onboardingUtils'
 import { translations } from '@/utils/translations'
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useState } from 'react'
@@ -48,7 +48,7 @@ const Home = () => {
           <Typography>
             Age:
             {' '}
-            {dateOfBirth ? new Date().getFullYear() - new Date(dateOfBirth).getFullYear() : 'N/A'}
+            {calculateAge(dateOfBirth)}
           </Typography>
         </Box>
       </Box>

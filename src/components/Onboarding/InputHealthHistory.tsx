@@ -21,7 +21,7 @@ const InputHealthHistory = () => {
         label="Date of Birth"
         type="date"
         value={basicInfo.dateOfBirth}
-        onChange={value => updateBasicInfo(undefined, value)}
+        onChange={value => updateBasicInfo(undefined, new Date(value))}
       />
 
       <Typography variant="h6" sx={{ mt: 3, mb: 2, fontWeight: 'bold', backgroundColor: '#ccc', p: 1 }}>
