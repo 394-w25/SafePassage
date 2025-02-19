@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import LoadingCircle from '@/components/common/LoadingCircle'
 import { useIsOnboarding } from '@/hooks'
 import { useUserStore } from '@/stores'
-import { Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -39,20 +38,6 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps) => {
 
   if (loading) {
     return <LoadingCircle />
-  }
-
-  if (!user) {
-    return (
-      <Typography
-        variant="h6"
-        sx={{
-          textAlign: 'center',
-          marginTop: '2rem',
-        }}
-      >
-        Please sign in to view this page
-      </Typography>
-    )
   }
 
   return element
