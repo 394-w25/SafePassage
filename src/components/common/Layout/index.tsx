@@ -1,12 +1,48 @@
+import LoadingCircle from '@/components/common/LoadingCircle'
 import { useIsOnboarding } from '@/hooks'
-import { Box } from '@mui/material'
-import { Outlet } from 'react-router-dom'
-
+import { useUserStore } from '@/stores'
+import { Box, Button, Typography } from '@mui/material'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Footer from './Footer'
-import Header from './Header'
 
 const Layout = () => {
   const isOnboarding = useIsOnboarding()
+  const loading = useUserStore(state => state.loading)
+  const userData = useUserStore(state => state.user)
+  const login = useUserStore(state => state.login)
+  const navigate = useNavigate()
+
+  if (loading) {
+    return <LoadingCircle />
+  }
+
+  if (userData === undefined) {
+    return (
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        textAlign: 'center',
+        backgroundColor: theme => theme.palette.background.default,
+        p: 3,
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+      >
+        <Typography variant="h4" fontWeight="bold" sx={{ mb: 2, color: 'primary.main' }}>
+          Welcome to SafePassage
+        </Typography>
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
+          Please login to continue
+        </Typography>
+        <Button variant="contained" size="large" onClick={async () => login(navigate)}>
+          Login
+        </Button>
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -19,13 +55,13 @@ const Layout = () => {
         backgroundColor: theme => theme.palette.background.default,
       }}
     >
-      {!isOnboarding
-      && <Header />}
+      {' '}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           display: 'flex',
+          mt: 2,
           justifyContent: 'center',
         }}
       >
@@ -38,8 +74,7 @@ const Layout = () => {
           <Outlet />
         </Box>
       </Box>
-      {!isOnboarding
-      && <Footer />}
+      {!isOnboarding && userData !== undefined && <Footer />}
     </Box>
   )
 }

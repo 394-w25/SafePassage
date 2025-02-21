@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 interface BasicInfo {
   name: string
-  dateOfBirth?: Date
+  dateOfBirth?: string
 }
 
 interface HealthHistoryContextType {
@@ -45,9 +45,11 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   const [contacts, setContacts] = useState<Contact[]>([])
 
   const updateBasicInfo = (name?: string, dateOfBirth?: Date) => {
+    // Format date to 'YYYY-MM-DD'
+    const formattedDateOfBirth = dateOfBirth?.toISOString().split('T')[0]
     setBasicInfo(prev => ({
       name: name ?? prev.name,
-      dateOfBirth: dateOfBirth ?? prev.dateOfBirth,
+      dateOfBirth: formattedDateOfBirth ?? prev.dateOfBirth,
     }))
   }
 
@@ -88,7 +90,7 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   }
 
   const submitProfile = async (navigate: NavigateFunction) => {
-    if (!basicInfo.dateOfBirth) {
+    if (basicInfo.dateOfBirth === undefined) {
       toast.error('Please provide your date of birth.')
       return
     }
