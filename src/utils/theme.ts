@@ -39,7 +39,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '20px',
+          borderRadius: '8px',
           padding: '8px 16px',
           textTransform: 'none',
           fontWeight: 500,
@@ -66,7 +66,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: '16px',
+          borderRadius: '8px',
           boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
         },
       },
@@ -79,7 +79,7 @@ const theme = createTheme({
             backgroundColor: theme.palette.background.paper,
           },
           '& .MuiInputBase-input': {
-            padding: '12px',
+            // padding: '12px',
           },
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.divider,
@@ -110,7 +110,7 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: '16px',
+          borderRadius: '8px',
           boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.1)',
         },
       },

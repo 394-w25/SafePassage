@@ -14,11 +14,13 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import { produce } from 'immer'
 import { useState } from 'react'
+import EditabelIcon from './EditabelIcon'
 
 interface EditableSectionProps {
   title: keyof HealthInfos
@@ -66,28 +68,41 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
   return (
     <>
       <Paper sx={{ p: 2, mt: 2, position: 'relative' }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-          {formatTitleCase(title)}
-          <IconButton size="small" sx={{ ml: 1 }} onClick={() => setOpen(true)}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Typography>
-        {items.length > 0
-          ? (
-              <List dense>
-                {items.map((item, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <ListItem key={index} sx={{ pl: 0 }}>
-                    <ListItemText primary={item} />
-                  </ListItem>
-                ))}
-              </List>
-            )
-          : (
-              <Typography variant="body2" color="textSecondary">
-                No entries. Click edit to add.
+        <Stack direction="row" spacing={2}>
+          <EditabelIcon />
+          <Box sx={{ flex: 1 }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                {formatTitleCase(title)}
               </Typography>
-            )}
+              <Box>
+                <IconButton size="small" sx={{ ml: 1 }} onClick={() => setOpen(true)}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            </Stack>
+            <Box>
+              {items.length > 0
+                ? (
+                    <List dense sx={{ py: 0 }}>
+                      {items.map((item, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                        <ListItem key={index} sx={{ pl: 0, py: 0 }}>
+                          <ListItemText primary={item} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  )
+                : (
+                    <Typography variant="body2" color="textSecondary">
+                      No entries. Click edit to add.
+                    </Typography>
+                  )}
+
+            </Box>
+          </Box>
+        </Stack>
+
       </Paper>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
@@ -104,6 +119,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                 fullWidth
                 variant="outlined"
                 value={item}
+                size="small"
                 onChange={e => handleChange(index, e.target.value)}
               />
               <IconButton onClick={() => handleDeleteItem(index)}>

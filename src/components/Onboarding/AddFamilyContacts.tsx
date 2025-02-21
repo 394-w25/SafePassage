@@ -15,12 +15,12 @@ const AddFamilyContacts = () => {
   return (
     <Box sx={{ mt: 4 }}>
       <Typography
-        variant="h6"
+        variant="h5"
         sx={{
           mb: 2,
           fontWeight: 'bold',
-          backgroundColor: '#ccc',
-          p: 1,
+          py: 0,
+          px: 1,
           textAlign: 'center',
         }}
       >
@@ -34,8 +34,8 @@ const AddFamilyContacts = () => {
       </Typography>
 
       {contacts.map((contact, index) => (
-        <Paper key={contact.id} sx={{ p: 2, mb: 2 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        <Paper key={contact.id} sx={{ p: 2, mb: 2, textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
             Contact
             {' '}
             {index + 1}

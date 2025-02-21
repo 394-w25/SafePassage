@@ -25,7 +25,6 @@ const Layout = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          px: 1,
           display: 'flex',
           justifyContent: 'center',
         }}
