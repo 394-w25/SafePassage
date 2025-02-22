@@ -1,4 +1,4 @@
-import type { SxProps, Theme } from '@mui/material'
+import type { SxProps, TextFieldProps, Theme } from '@mui/material'
 import TextField from '@mui/material/TextField'
 
 interface CustomInputFieldProps<T> {
@@ -9,6 +9,8 @@ interface CustomInputFieldProps<T> {
   onEnterPress?: () => void
   required?: boolean
   sx?: SxProps<Theme>
+  size?: TextFieldProps['size']
+  InputLabelProps?: TextFieldProps['InputLabelProps']
 }
 
 const formatValue = (value: string | Date | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
@@ -33,7 +35,9 @@ const CustomInputField = <T extends string | Date>({
   type = 'text',
   onEnterPress,
   required = false,
+  size = 'small',
   sx,
+  InputLabelProps,
 }: CustomInputFieldProps<T>) => (
   <TextField
     label={label}
@@ -47,6 +51,8 @@ const CustomInputField = <T extends string | Date>({
       }
       onChange(newValue as T)
     }}
+    size={size}
+    InputLabelProps={InputLabelProps}
     required={required}
     fullWidth
     margin="normal"

@@ -15,16 +15,16 @@ const BottomController = ({ activeStep, setActiveStep }: BottomControllerProps) 
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-      <Button variant="contained" disabled={activeStep === 0} onClick={() => setActiveStep(activeStep - 1)}>
+      <Button variant="contained" size="small" disabled={activeStep === 0} onClick={() => setActiveStep(activeStep - 1)}>
         Back
       </Button>
       {activeStep < steps.length - 1 && (
-        <Button variant="contained" disabled={activeStep === 1} onClick={() => setActiveStep(activeStep + 1)}>
+        <Button variant="contained" size="small" disabled={activeStep === 1} onClick={() => setActiveStep(activeStep + 1)}>
           Next
         </Button>
       )}
       {activeStep === steps.length - 1 && (
-        <Button variant="contained" color="secondary" onClick={() => submitProfile(navigate)}>
+        <Button variant="contained" size="small" color="secondary" onClick={() => submitProfile(navigate)}>
           Submit
         </Button>
       )}
