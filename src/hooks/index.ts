@@ -1,1 +1,1 @@
-export { useIsOnboarding } from './useIsOnboarding'
+export { useIsOnboarding, useShowFooter } from './useShowFooter'

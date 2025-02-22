@@ -1,5 +1,4 @@
-import LoadingCircle from '@/components/common/LoadingCircle'
-import { useIsOnboarding } from '@/hooks'
+import { useShowFooter } from '@/hooks'
 import { useUserStore } from '@/stores'
 import { Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
@@ -7,13 +6,8 @@ import AuthPrompt from './AuthPrompt'
 import Footer from './Footer'
 
 const Layout = () => {
-  const isOnboarding = useIsOnboarding()
-  const loading = useUserStore(state => state.loading)
+  const showFooter = useShowFooter()
   const userData = useUserStore(state => state.user)
-
-  if (loading) {
-    return <LoadingCircle />
-  }
 
   if (userData === undefined) {
     return (
@@ -55,7 +49,7 @@ const Layout = () => {
         </Box>
       </Box>
 
-      {!isOnboarding && userData !== undefined && <Footer />}
+      {!showFooter && userData !== undefined && <Footer />}
     </Box>
   )
 }

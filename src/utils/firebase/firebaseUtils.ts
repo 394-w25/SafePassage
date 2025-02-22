@@ -4,6 +4,33 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from './firebaseConfig'
 
 /**
+ * Get a document from Firestore for a given uid.
+ *
+ * @param uid The unique identifier for the document.
+ * @param collection The collection to get the document from.
+ * @returns The document data if it exists.
+ */
+const getDocument = async <T extends WithFieldValue<DocumentData>>(
+  uid: string,
+  collection: string,
+): Promise<T | undefined> => {
+  try {
+    const docRef = doc(db, collection, uid)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      return docSnap.data() as T
+    }
+
+    return undefined
+  }
+  catch (error) {
+    console.error(`Error in getDocument for ${uid}:`, error)
+    return undefined
+  }
+}
+
+/**
  * Get a document from Firestore or create it if it doesn't exist.
  *
  * @param uid The unique identifier for the document.
@@ -56,4 +83,4 @@ const updateDocument = async <T>(
   }
 }
 
-export { getOrCreateDocument, updateDocument }
+export { getDocument, getOrCreateDocument, updateDocument }

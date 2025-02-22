@@ -5,6 +5,7 @@ import Onboarding from '@/pages/Onboarding'
 import { useUserStore } from '@/stores'
 import Box from '@mui/material/Box'
 import { Route, Routes } from 'react-router-dom'
+import UserMedicalRecord from './pages/UserMedicalRecord'
 
 const AppRoutes = () => {
   const routeConfig = [
@@ -20,14 +21,9 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<Layout />}
-      >
-        <Route
-          index
-          element={<ProtectedRoute element={<Home />} />}
-        />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<ProtectedRoute element={<Home />} />} />
+
         {routeConfig.map(({ path, element }) => (
           <Route
             key={path}
@@ -35,6 +31,10 @@ const AppRoutes = () => {
             element={<ProtectedRoute element={element} />}
           />
         ))}
+
+        {/* QR Code Scanned */}
+        <Route path="/medical/:uid" element={<UserMedicalRecord />} />
+
         {/* 404 Page */}
         <Route
           path="*"
