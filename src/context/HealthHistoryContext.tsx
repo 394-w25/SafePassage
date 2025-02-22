@@ -31,15 +31,25 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   const user = useUserStore(state => state.user)
   const updateProfile = useUserStore(state => state.updateProfile)
 
-  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
-    name: user?.name ?? '',
+  // Load from local storage on first render
+  const [basicInfo, setBasicInfo] = useState<BasicInfo>(() => {
+    const storedData = localStorage.getItem('basicInfo')
+    const parsedData: BasicInfo = storedData !== null ? (JSON.parse(storedData) as BasicInfo) : { name: user?.name ?? '' }
+
+    return parsedData
   })
 
-  const [healthInfos, setHealthInfos] = useState<HealthInfos>({
-    allergies: [],
-    medicalConditions: [],
-    pastSurgeries: [],
-    medicalDevices: [],
+  const [healthInfos, setHealthInfos] = useState<HealthInfos>(() => {
+    const storedData = localStorage.getItem('healthInfos')
+
+    const parsedData: Partial<HealthInfos> = storedData !== null ? (JSON.parse(storedData) as Partial<HealthInfos>) : {}
+
+    return {
+      allergies: parsedData.allergies ?? [],
+      medicalConditions: parsedData.medicalConditions ?? [],
+      pastSurgeries: parsedData.pastSurgeries ?? [],
+      medicalDevices: parsedData.medicalDevices ?? [],
+    }
   })
 
   const [contacts, setContacts] = useState<Contact[]>([])
@@ -54,14 +64,18 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   }
 
   const updateHealthInfos = (newHealthInfos: Partial<HealthInfos>) => {
-    setHealthInfos(prev =>
-      produce(prev, (draft) => {
+    setHealthInfos((prev) => {
+      const updated = produce(prev, (draft) => {
         Object.keys(newHealthInfos).forEach((key) => {
           const category = key as keyof HealthInfos
           draft[category] = Array.from(new Set(newHealthInfos[category] ?? []))
         })
-      }),
-    )
+      })
+
+      localStorage.setItem('healthInfos', JSON.stringify(updated))
+
+      return updated
+    })
   }
 
   const updateContact = (id: number, field: keyof Contact, value: string) => {
