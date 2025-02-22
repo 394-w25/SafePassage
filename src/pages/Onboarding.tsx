@@ -16,7 +16,7 @@ const Onboarding = () => {
 
   return (
     <HealthHistoryProvider>
-      <Container maxWidth="sm" sx={{ py: 4, px: 1, backgroundColor: '#FBF9FE' }}>
+      <Container maxWidth="sm" sx={{ py: 4, px: 1 }}>
         <Box>
           <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map(label => (

@@ -78,9 +78,6 @@ const theme = createTheme({
             borderRadius: '8px',
             backgroundColor: theme.palette.background.paper,
           },
-          '& .MuiInputBase-input': {
-            // padding: '12px',
-          },
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.divider,
           },

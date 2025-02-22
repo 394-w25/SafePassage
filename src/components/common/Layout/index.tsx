@@ -52,16 +52,18 @@ const Layout = () => {
         minHeight: '100vh',
         margin: 0,
         padding: 0,
-        backgroundColor: theme => theme.palette.background.default,
+        background: theme =>
+          `linear-gradient(135deg, ${theme.palette.background.default} 30%, ${theme.palette.primary.light} 100%)`,
+        backgroundAttachment: 'fixed',
       }}
     >
-      {' '}
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           display: 'flex',
-          mt: 2,
+          mt: 4,
           justifyContent: 'center',
         }}
       >
@@ -69,11 +71,13 @@ const Layout = () => {
           sx={{
             maxWidth: '1200px',
             width: '100%',
+            mx: 2,
           }}
         >
           <Outlet />
         </Box>
       </Box>
+
       {!isOnboarding && userData !== undefined && <Footer />}
     </Box>
   )
