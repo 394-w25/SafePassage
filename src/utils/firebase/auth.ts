@@ -1,7 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 
 import { auth } from './firebaseConfig'
-import getUserProfile from './userProfile'
+import { getUserProfile } from './userProfile'
 
 const loginUser = async (): Promise<UserProfile | undefined> => {
   try {

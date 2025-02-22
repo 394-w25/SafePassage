@@ -1,6 +1,6 @@
 import type { User } from 'firebase/auth'
 
-import { getOrCreateDocument } from './firebaseUtils'
+import { getDocument, getOrCreateDocument } from './firebaseUtils'
 
 const getUserProfile = async (
   user: User,
@@ -22,4 +22,8 @@ const getUserProfile = async (
   return userProfile
 }
 
-export default getUserProfile
+const getUIDProfile = async (uid?: string): Promise<UserProfile | undefined> => {
+  return uid !== undefined ? getDocument(uid, 'users') : undefined
+}
+
+export { getUIDProfile, getUserProfile }
