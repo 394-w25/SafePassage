@@ -1,4 +1,4 @@
-import { useShowFooter } from '@/hooks'
+import { useIsMedicalRecord, useShowFooter } from '@/hooks'
 import { useUserStore } from '@/stores'
 import { Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
@@ -7,9 +7,10 @@ import Footer from './Footer'
 
 const Layout = () => {
   const showFooter = useShowFooter()
+  const isMedicalRecord = useIsMedicalRecord()
   const userData = useUserStore(state => state.user)
 
-  if (userData === undefined) {
+  if (!isMedicalRecord && userData === undefined) {
     return (
       <AuthPrompt />
     )
