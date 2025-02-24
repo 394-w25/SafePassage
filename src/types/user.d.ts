@@ -2,6 +2,7 @@ type UserType = 'admin' | 'user'
 
 interface HealthInfos {
   allergies?: string[]
+  medications?: string[]
   medicalConditions?: string[]
   pastSurgeries?: string[]
   medicalDevices?: string[]
