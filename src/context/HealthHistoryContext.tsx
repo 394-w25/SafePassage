@@ -37,6 +37,7 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
   const [healthInfos, setHealthInfos] = useState<HealthInfos>({
     allergies: [],
+    medications: [],
     medicalConditions: [],
     pastSurgeries: [],
     medicalDevices: [],
