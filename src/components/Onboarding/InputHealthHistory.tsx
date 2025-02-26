@@ -70,13 +70,23 @@ const InputHealthHistory = () => {
         <Divider sx={{ backgroundColor: '#FAFAFC' }} />
         <CardContent sx={{ py: 0.5, px: 1.5 }}>
           {Object.entries(healthInfos).map(([key, items]) => (
-            <EditableSection
-              key={key}
-              title={key as keyof HealthInfos}
-              // items={items as string[]}
-              items={key === 'medications' ? (items as Medication[]) : (items as string[])}
-              onSave={newData => updateHealthInfos({ [key]: newData })}
-            />
+            key === 'medications' ? (
+              <EditableSection
+                key={key}
+                title={key as keyof HealthInfos}
+                items={items as Medication[] ?? []} // ✅ Correctly pass medications as an array of objects
+                onSave={newData => updateHealthInfos({ [key]: newData })}
+              />
+            )
+              : (
+                  <EditableSection
+                    key={key}
+                    title={key as keyof HealthInfos}
+                    // items={items as string[] ?? []} // ✅ Keep other fields as string[]
+                    items={key === 'medications' ? (items as Medication[]) : (items as string[])}
+                    onSave={newData => updateHealthInfos({ [key]: newData })}
+                  />
+                )
           ))}
         </CardContent>
       </Card>

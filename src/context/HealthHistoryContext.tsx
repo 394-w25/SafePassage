@@ -11,6 +11,7 @@ interface BasicInfo {
   dateOfBirth?: string
 }
 
+
 interface HealthHistoryContextType {
   basicInfo: BasicInfo
   updateBasicInfo: (name?: string, dateOfBirth?: Date) => void
@@ -58,12 +59,25 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
     setHealthInfos(prev =>
       produce(prev, (draft) => {
         Object.keys(newHealthInfos).forEach((key) => {
-          const category = key as keyof HealthInfos
-          draft[category] = Array.from(new Set(newHealthInfos[category] ?? []))
-        })
-      }),
-    )
-  }
+          const category = key as keyof HealthInfos;
+  
+          if (category === 'medications') {
+            draft.medications = Array.isArray(newHealthInfos.medications)
+              ? newHealthInfos.medications.map(med => ({
+                  name: med.name?.trim() || "", 
+                  dosage: med.dosage?.trim() || "",
+                  time: med.time?.trim() || "",
+                }))
+              : prev.medications ?? []; 
+          } else {
+            draft[category] = Array.from(new Set(newHealthInfos[category] ?? []));
+          }
+        });
+      })
+    );
+  };
+  
+  
 
   const updateContact = (id: number, field: keyof Contact, value: string) => {
     setContacts(prev =>
@@ -135,18 +149,25 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
       // Process healthInfos: remove duplicates
       draft.healthInfos = Object.fromEntries(
-        Object.entries(draft.healthInfos).map(([key, values]) => [
-          key,
-          Array.from(new Set(values ?? [])),
-        ]),
-      )
-
-      // If errors exist, stop processing and return null
-      if (errors.length > 0) {
-        errors.forEach(error => toast.error(error))
-        hasError = true
-      }
-    })
+        Object.entries(draft.healthInfos).map(([key, values]) => {
+          if (key === "medications") {
+            return [
+              key,
+              values
+                ? Array.from(
+                    new Map(
+                      values.map(med => [`${med.name}-${med.dosage}-${med.time}`, med])
+                    ).values()
+                  )
+                : [],
+            ]; // ✅ Removes duplicate medications while keeping all fields
+          } else {
+            return [key, Array.from(new Set(values ?? []))];
+          }
+        })
+      );
+      
+      
 
     // If errors exist, prevent submission
     if (hasError) {

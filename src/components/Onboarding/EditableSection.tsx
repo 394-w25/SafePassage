@@ -21,6 +21,12 @@ import {
 import { produce } from 'immer'
 import { useState } from 'react'
 
+// interface Medication {
+//   name: string
+//   dosage: string
+//   time: string
+// }
+
 interface Medication {
   id: string
   name: string
@@ -30,70 +36,35 @@ interface Medication {
 
 interface EditableSectionProps {
   title: keyof HealthInfos
-  items: string[] | Medication[]
-  onSave: (newData: string[] | Medication[]) => void
+  items: string[]
+  onSave: (newData: string[]) => void
 }
 
 const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
   const [open, setOpen] = useState(false)
-
-  const isMedication = title === 'medications'
-  const [newItems, setNewItems] = useState(() =>
-    isMedication ? [...(items as Medication[])] : [...(items as string[])],
-  )
-
-  const [errors, setErrors] = useState(() =>
-    isMedication
-      ? (items as Medication[]).map(() => ({ name: false, dosage: false, time: false }))
-      : (items as string[]).map(() => false),
-  )
+  const [newItems, setNewItems] = useState<string[]>(() => [...items])
+  const [errors, setErrors] = useState<boolean[]>(Array.from<boolean>({ length: items.length }).fill(false))
 
   const handleSave = () => {
-    if (isMedication) {
-      // const validItems = (newItems as Medication[]).filter(
-      //   med => !!med.name?.trim() && !!med.dosage?.trim() && !!med.time?.trim(),
-      // )
-      const validItems = (newItems as Medication[]).filter(
-        med => med.name.trim().length > 0 && med.dosage.trim().length > 0 && med.time.trim().length > 0,
-      )
+    const trimmedItems = newItems.map(item => item.trim()).filter(item => item !== '')
+    const uniqueItems = Array.from(new Set(trimmedItems))
 
-      onSave(validItems)
-    }
-    else {
-      const validItems = (newItems as string[]).map(item => item.trim()).filter(item => item.length > 0)
-      onSave(validItems)
-    }
+    onSave(uniqueItems)
     setOpen(false)
   }
 
-  const handleChange = (index: number, field: keyof Medication | string, value: string) => {
+  const handleChange = (index: number, value: string) => {
     setNewItems(prev =>
       produce(prev, (draft) => {
-        if (isMedication) {
-          // const updatedMedication = { ...(draft[index] as Medication), [field]: value };
-          // (draft as Medication[])[index] = updatedMedication
-          (draft as Medication[])[index] = {
-            ...((draft as Medication[])[index]),
-            [field]: value,
-          }
-        }
-        else {
-          (draft as string[])[index] = value
-        }
+        draft[index] = value
       }),
     )
 
-    setErrors(prev =>
-      produce(prev, (draft) => {
-        if (isMedication) {
-          const updatedError = { ...(draft[index] as { name: boolean, dosage: boolean, time: boolean }), [field]: value.trim() === '' };
-          (draft as { name: boolean, dosage: boolean, time: boolean }[])[index] = updatedError
-        }
-        else {
-          (draft as boolean[])[index] = value.trim() === ''
-        }
-      }),
-    )
+    setErrors((prev) => {
+      const newErrors = [...prev]
+      newErrors[index] = value.trim() === '' || newItems.filter(i => i === value).length > 1
+      return newErrors
+    })
   }
 
   const handleAddItem = () => {
@@ -103,7 +74,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
           (draft as Medication[]).push({ name: '', dosage: '', time: '' })
         }
         else {
-          (draft as string[]).push('')
+          (draft).push('')
         }
       }),
     )
@@ -114,7 +85,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
           (draft as { name: boolean, dosage: boolean, time: boolean }[]).push({ name: false, dosage: false, time: false })
         }
         else {
-          (draft as boolean[]).push(false)
+          (draft).push(false)
         }
       }),
     )
@@ -189,7 +160,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                                 />
                               )
                             : (
-                                <ListItemText primary={item as string} />
+                                <ListItemText primary={item} />
                               )}
                         </ListItem>
                       ))}
@@ -227,7 +198,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                       {items.map((item, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <ListItem key={index} sx={{ pl: 0, py: 0 }}>
-                          <ListItemText primary={`${(item as Medication).name} - ${(item as Medication).dosage} at ${(item as Medication).time}`} />
+                          <ListItemText primary={item} />
                         </ListItem>
                       ))}
                     </List>
@@ -280,7 +251,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                     <TextField
                       fullWidth
                       variant="outlined"
-                      value={item as string}
+                      value={item}
                       size="small"
                       onChange={e => handleChange(index, '', e.target.value)}
                     />
