@@ -29,3 +29,18 @@ export const calculateAge = (dateOfBirth: string | undefined): string | number =
   const currentYear = new Date().getFullYear()
   return currentYear - dobYear
 }
+
+export const emergencyContactRelationships = [
+  'Parent',
+  'Sibling',
+  'Spouse',
+  'Child',
+  'Friend',
+  'Other',
+  'Father',
+  'Mother',
+  'Brother',
+  'Sister',
+  'Son',
+  'Daughter',
+].sort((a, b) => a.localeCompare(b))
