@@ -130,11 +130,12 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
         <DialogTitle>
           Edit
+          {' '}
           {formatTitleCase(title)}
         </DialogTitle>
         <DialogContent>
           <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 1 }}>
-            Changes will be saved only if you press "Save". Empty entries will be removed.
+            Changes will be saved only if you press "Save".
           </Typography>
 
           <Box sx={{ mb: 2 }}>
