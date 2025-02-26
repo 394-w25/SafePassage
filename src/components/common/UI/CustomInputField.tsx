@@ -1,4 +1,4 @@
-import type { SxProps, TextFieldProps, Theme } from '@mui/material'
+import type { InputLabelProps, SlotProps, SxProps, TextFieldOwnerState, TextFieldProps, Theme } from '@mui/material'
 import TextField from '@mui/material/TextField'
 
 interface CustomInputFieldProps<T> {
@@ -10,7 +10,7 @@ interface CustomInputFieldProps<T> {
   required?: boolean
   sx?: SxProps<Theme>
   size?: TextFieldProps['size']
-  InputLabelProps?: TextFieldProps['InputLabelProps']
+  inputLabel?: SlotProps<React.ElementType<InputLabelProps>, object, TextFieldOwnerState>
 }
 
 const formatValue = (value: string | Date | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
@@ -37,7 +37,7 @@ const CustomInputField = <T extends string | Date>({
   required = false,
   size = 'small',
   sx,
-  InputLabelProps,
+  inputLabel,
 }: CustomInputFieldProps<T>) => (
   <TextField
     label={label}
@@ -52,7 +52,7 @@ const CustomInputField = <T extends string | Date>({
       onChange(newValue as T)
     }}
     size={size}
-    InputLabelProps={InputLabelProps}
+    slotProps={{ inputLabel }}
     required={required}
     fullWidth
     margin="normal"
