@@ -21,14 +21,7 @@ import {
 import { produce } from 'immer'
 import { useState } from 'react'
 
-// interface Medication {
-//   name: string
-//   dosage: string
-//   time: string
-// }
-
 interface Medication {
-  id: string
   name: string
   dosage: string
   time: string
