@@ -3,6 +3,12 @@ import { useHealthHistory } from '@/context'
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material'
 import EditableSection from './EditableSection'
 
+interface Medication {
+  name: string
+  dosage: string
+  time: string
+}
+
 const InputHealthHistory = () => {
   const { basicInfo, updateBasicInfo, healthInfos, updateHealthInfos } = useHealthHistory()
 
@@ -67,7 +73,8 @@ const InputHealthHistory = () => {
             <EditableSection
               key={key}
               title={key as keyof HealthInfos}
-              items={items as string[]}
+              // items={items as string[]}
+              items={key === 'medications' ? (items as Medication[]) : (items as string[])}
               onSave={newData => updateHealthInfos({ [key]: newData })}
             />
           ))}
