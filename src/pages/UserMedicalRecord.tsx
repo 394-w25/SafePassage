@@ -1,49 +1,23 @@
 import { LoadingCircle } from '@/components/common'
 import { LanguageToggle, MedicalProviderView } from '@/components/Home'
-import { getUIDProfile } from '@/utils/firebase'
-import { Box, Button, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from 'sonner'
+import EmergencyContacts from '@/components/Home/EmergencyContacts'
+import { useEmergencyAlert } from '@/hooks'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 
 const UserMedicalRecord = () => {
-  const { uid } = useParams<{ uid: string }>()
-  const navigate = useNavigate()
-
-  const [userData, setUserData] = useState<UserProfile | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const data = await getUIDProfile(uid)
-        if (!data) {
-          void navigate('/404')
-          return
-        }
-        setUserData(data)
-      }
-      catch (error) {
-        console.error('Failed to fetch user data:', error)
-        void navigate('/404')
-      }
-      finally {
-        setLoading(false)
-      }
-    }
-
-    void fetchUserData()
-  }, [uid, navigate])
+  const {
+    userData,
+    loading,
+    showPopup,
+    countdown,
+    hasTriggeredRef,
+    handleEmergency,
+    handleSendNow,
+    handleCancel,
+  } = useEmergencyAlert()
 
   if (loading) {
-    return (
-      <>
-        <Typography variant="h6" sx={{ textAlign: 'center', mt: 3 }}>
-          Loading User Data...
-        </Typography>
-        <LoadingCircle />
-      </>
-    )
+    return <LoadingCircle textInfo="Loading User Data..." />
   }
 
   if (!userData) {
@@ -51,13 +25,7 @@ const UserMedicalRecord = () => {
   }
 
   const { healthData, name, profilePic } = userData
-  const { dateOfBirth, healthInfos } = healthData || {}
-
-  const handleEmergency = () => {
-    toast.error(`⚠️ EMERGENCY ALERT: ${name} needs immediate assistance!`, {
-      duration: 8000,
-    })
-  }
+  const { dateOfBirth, healthInfos, contacts } = healthData || {}
 
   return (
     <Box sx={{ px: 2, py: 3 }}>
@@ -74,12 +42,15 @@ const UserMedicalRecord = () => {
         healthInfos={healthInfos}
       />
 
+      <EmergencyContacts contacts={contacts} />
+
       <LanguageToggle />
 
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
         <Button
           variant="contained"
           size="large"
+          disabled={hasTriggeredRef.current}
           onClick={handleEmergency}
           sx={{
             backgroundColor: 'red',
@@ -91,6 +62,24 @@ const UserMedicalRecord = () => {
         </Button>
       </Box>
 
+      {/* Countdown Dialog */}
+      <Dialog open={showPopup} onClose={handleCancel}>
+        <DialogTitle>Emergency Alert</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            The system will send an emergency alert to all the emergency contacts in
+          </Typography>
+          <Typography variant="h5" fontWeight="bold" color="error" sx={{ textAlign: 'center' }}>
+            {countdown}
+            {' '}
+            s
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="secondary">Cancel</Button>
+          <Button onClick={handleSendNow} color="error" variant="contained">Send Now</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }

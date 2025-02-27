@@ -16,7 +16,7 @@ const EmergencyContacts = ({ contacts }: EmergencyContactsProps) => {
         {Array.isArray(contacts) && contacts.length > 0
           ? (
               <List dense sx={{ bgcolor: '#FAF9F6', borderRadius: 1, p: 1 }}>
-                {contacts.map(contact => (
+                {contacts.map((contact, index) => (
                   <React.Fragment key={contact.id}>
                     <ListItem disablePadding>
                       <ListItemText
@@ -28,7 +28,7 @@ const EmergencyContacts = ({ contacts }: EmergencyContactsProps) => {
                         sx={{ textAlign: 'right' }}
                       />
                     </ListItem>
-                    <Divider />
+                    {index < contacts.length - 1 && <Divider />}
                   </React.Fragment>
                 ))}
               </List>

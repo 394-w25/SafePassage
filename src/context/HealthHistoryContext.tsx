@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type { NavigateFunction } from 'react-router-dom'
 import { useUserStore } from '@/stores'
-import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/onboardingUtils'
+import { formatPhoneNumber, isValidUSPhoneNumber } from '@/utils/onboardingUtils'
 import { produce } from 'immer'
 import { createContext, useContext, useState } from 'react'
 import { toast } from 'sonner'
@@ -121,7 +121,7 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
         if (!phone) {
           errors.push(`Contact ${index + 1}: Phone number is required.`)
         }
-        else if (!isValidPhoneNumber(phone)) {
+        else if (!isValidUSPhoneNumber(phone)) {
           errors.push(`Contact ${index + 1}: Invalid phone number.`)
         }
 

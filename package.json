@@ -22,7 +22,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
-    "@zl-asica/react": "^0.3.10",
+    "@zl-asica/react": "^0.3.14",
     "firebase": "^11.2.0",
     "immer": "^10.1.1",
     "qrcode.react": "^4.2.0",
