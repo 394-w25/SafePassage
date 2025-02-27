@@ -21,12 +21,6 @@ import {
 import { produce } from 'immer'
 import { useState } from 'react'
 
-interface Medication {
-  name: string
-  dosage: string
-  time: string
-}
-
 interface EditableSectionProps {
   title: keyof HealthInfos
   items: string[]
@@ -63,29 +57,19 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
   const handleAddItem = () => {
     setNewItems(prev =>
       produce(prev, (draft) => {
-        if (isMedication) {
-          (draft as Medication[]).push({ name: '', dosage: '', time: '' })
-        }
-        else {
-          (draft).push('')
-        }
+        draft.push('')
       }),
     )
-
-    setErrors(prev =>
-      produce(prev, (draft) => {
-        if (isMedication) {
-          (draft as { name: boolean, dosage: boolean, time: boolean }[]).push({ name: false, dosage: false, time: false })
-        }
-        else {
-          (draft).push(false)
-        }
-      }),
-    )
+    setErrors(prev => [...prev, true])
   }
 
   const handleDeleteItem = (index: number) => {
     setNewItems(prev =>
+      produce(prev, (draft) => {
+        draft.splice(index, 1)
+      }),
+    )
+    setErrors(prev =>
       produce(prev, (draft) => {
         draft.splice(index, 1)
       }),
@@ -122,39 +106,12 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                 ? (
                     <List dense sx={{ py: 0, pl: 1 }}>
                       {items.map((item, index) => (
-
-                        // <ListItem key={index} sx={{ pl: 0, py: 0, display: 'flex', alignItems: 'center', mb: 1 }}>
-                        // <ListItem key={(item as Medication).name || index} sx={{ pl: 0, py: 0, display: 'flex', alignItems: 'center', mb: 1 }}>
-                        // <ListItem key={`${(item as Medication).name}-${index}`} sx={{ pl: 0, py: 0, display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <ListItem key={(item as Medication).id || index}>
-
+                        // eslint-disable-next-line react/no-array-index-key
+                        <ListItem key={index} sx={{ pl: 0, py: 0, display: 'flex', alignItems: 'center' }}>
                           <Typography variant="body2" color="textPrimary" sx={{ mr: 1 }}>
                             •
                           </Typography>
-                          {isMedication
-                            ? (
-                                <ListItemText
-                                  primary={(
-
-                                    <Typography variant="body2">
-                                      <strong>Name:</strong>
-                                      {' '}
-                                      {(item as Medication).name}
-                                      <br />
-                                      <strong>Dosage:</strong>
-                                      {' '}
-                                      {(item as Medication).dosage}
-                                      <br />
-                                      <strong>Time:</strong>
-                                      {' '}
-                                      {(item as Medication).time}
-                                    </Typography>
-                                  )}
-                                />
-                              )
-                            : (
-                                <ListItemText primary={item} />
-                              )}
+                          <ListItemText primary={item} />
                         </ListItem>
                       ))}
                     </List>
@@ -212,45 +169,15 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
           {newItems.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              {isMedication
-                ? (
-                    <Stack spacing={1} sx={{ flex: 1, mb: 2 }}>
-                      <TextField
-                        fullWidth
-                        label="Name"
-                        variant="outlined"
-                        value={(item as Medication).name}
-                        size="small"
-                        onChange={e => handleChange(index, 'name', e.target.value)}
-                      />
-                      <TextField
-                        fullWidth
-                        label="Dosage"
-                        variant="outlined"
-                        value={(item as Medication).dosage}
-                        size="small"
-                        onChange={e => handleChange(index, 'dosage', e.target.value)}
-                      />
-                      <TextField
-                        fullWidth
-                        label="Time"
-                        variant="outlined"
-                        value={(item as Medication).time}
-                        size="small"
-                        onChange={e => handleChange(index, 'time', e.target.value)}
-                      />
-                    </Stack>
-                  )
-                : (
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      value={item}
-                      size="small"
-                      onChange={e => handleChange(index, '', e.target.value)}
-                    />
-                  )}
-
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={item}
+                size="small"
+                error={errors[index]}
+                helperText={errors[index] ? 'Cannot be empty or duplicate' : ''}
+                onChange={e => handleChange(index, e.target.value)}
+              />
               <IconButton onClick={() => handleDeleteItem(index)} sx={{ ml: 1 }}>
                 <DeleteIcon />
               </IconButton>
@@ -271,7 +198,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
           <Button
             variant="contained"
             onClick={handleSave}
-            disabled={isMedication ? errors.some(e => Object.values(e).some(Boolean)) : errors.some(Boolean)}
+            disabled={errors.some(e => e)}
           >
             Save
           </Button>

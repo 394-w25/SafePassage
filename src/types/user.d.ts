@@ -1,21 +1,8 @@
 type UserType = 'admin' | 'user'
 
-interface Medication {
-  name?: string
-  dosage?: string
-  time?: string
-}
-
-interface Medication {
-  id: string
-  name: string
-  dosage: string
-  time: string
-}
-
 interface HealthInfos {
   allergies?: string[]
-  medications?: Medication []
+  medications?: string[]
   medicalConditions?: string[]
   pastSurgeries?: string[]
   medicalDevices?: string[]
