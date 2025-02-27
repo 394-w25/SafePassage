@@ -5,13 +5,15 @@ export const formatTitleCase = (text: string): string => {
     .trim()
 }
 
-export const isValidPhoneNumber = (phone: string): boolean => {
-  const phoneRegex = /^[+\d][\d\s\-()]+$/
-  return phoneRegex.test(phone)
+export const formatPhoneNumber = (value: string): string => {
+  const cleaned = value.replace(/\D/g, '')
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+  return match ? `(${match[1]}) ${match[2]}-${match[3]}` : value
 }
 
-export const formatPhoneNumber = (phone: string): string => {
-  return phone.replace(/[()\s-]/g, '')
+// Validating phone number
+export const isValidUSPhoneNumber = (value: string): boolean => {
+  return /^\(\d{3}\) \d{3}-\d{4}$/.test(formatPhoneNumber(value))
 }
 
 /**
@@ -27,3 +29,18 @@ export const calculateAge = (dateOfBirth: string | undefined): string | number =
   const currentYear = new Date().getFullYear()
   return currentYear - dobYear
 }
+
+export const emergencyContactRelationships = [
+  'Parent',
+  'Sibling',
+  'Spouse',
+  'Child',
+  'Friend',
+  'Other',
+  'Father',
+  'Mother',
+  'Brother',
+  'Sister',
+  'Son',
+  'Daughter',
+].sort((a, b) => a.localeCompare(b))

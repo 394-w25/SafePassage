@@ -1,4 +1,6 @@
+import { CustomAutocomplete, CustomInputField } from '@/components/common/UI'
 import { useHealthHistory } from '@/context'
+import { emergencyContactRelationships } from '@/utils/onboardingUtils'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import DeleteIcon from '@mui/icons-material/Delete'
 import {
@@ -7,7 +9,6 @@ import {
   Paper,
   Typography,
 } from '@mui/material'
-import { CustomInputField } from '../common/UI'
 
 const AddFamilyContacts = () => {
   const { contacts, addContact, updateContact, removeContact } = useHealthHistory()
@@ -45,10 +46,11 @@ const AddFamilyContacts = () => {
             value={contact.name}
             onChange={value => updateContact(contact.id, 'name', value)}
           />
-          <CustomInputField
+          <CustomAutocomplete
             label="Relationship"
             value={contact.relationship}
             onChange={value => updateContact(contact.id, 'relationship', value)}
+            options={emergencyContactRelationships}
           />
           <CustomInputField
             label="Phone number"
