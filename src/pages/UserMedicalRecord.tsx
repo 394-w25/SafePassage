@@ -36,14 +36,7 @@ const UserMedicalRecord = () => {
   }, [uid, navigate])
 
   if (loading) {
-    return (
-      <>
-        <Typography variant="h6" sx={{ textAlign: 'center', mt: 3 }}>
-          Loading User Data...
-        </Typography>
-        <LoadingCircle />
-      </>
-    )
+    return (<LoadingCircle textInfo="Loading User Data..." />)
   }
 
   if (!userData) {
