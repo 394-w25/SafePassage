@@ -1,5 +1,5 @@
 import type { NavigateFunction } from 'react-router-dom'
-import { auth, loginUser, logoutUser, updateDocument } from '@/utils/firebase'
+import { auth, loginUser, logoutUser, subscribeToDocument, updateDocument } from '@/utils/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import { toast } from 'sonner'
 import { create } from 'zustand'
@@ -23,21 +23,34 @@ const useUserStore = create<UserState>()(
       error: null,
 
       initializeAuthListener: () => {
+        let unsubscribeDoc: () => void = () => {}
+
         const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
           set({ loading: true, error: null })
 
           if (firebaseUser) {
-            const currentUser = get().user
-            set({ user: currentUser ?? undefined })
+            unsubscribeDoc = subscribeToDocument<UserProfile>(
+              'users',
+              firebaseUser.uid,
+              (data) => {
+                if (data) {
+                  set({ user: data })
+                }
+              },
+            )
           }
           else {
+            unsubscribeDoc()
             set({ user: undefined })
           }
 
           set({ loading: false })
         })
 
-        return unsubscribeAuth
+        return () => {
+          unsubscribeAuth()
+          unsubscribeDoc()
+        }
       },
 
       login: async (navigate) => {
