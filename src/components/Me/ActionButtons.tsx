@@ -1,4 +1,5 @@
 import { SmallLoadingCircle } from '@/components/common'
+import { useHealthHistory } from '@/context'
 import { Box, Button } from '@mui/material'
 
 interface ActionButtonsProps {
@@ -16,6 +17,7 @@ const ActionButtons = ({
   onCancel,
   onEdit,
 }: ActionButtonsProps) => {
+  const { submitProfile } = useHealthHistory()
   return (
     <Box display="flex" justifyContent="center" gap={2} mt={4}>
       {editing
@@ -24,7 +26,10 @@ const ActionButtons = ({
               <Button
                 variant="contained"
                 color="primary"
-                onClick={onSave}
+                onClick={() => {
+                  submitProfile()
+                  onSave()
+                }}
                 disabled={loading}
               >
                 {loading ? <SmallLoadingCircle text="Saving..." /> : 'Save'}
