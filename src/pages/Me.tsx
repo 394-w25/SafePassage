@@ -1,6 +1,5 @@
 import { ConfirmationDialog } from '@/components/common'
 import { ActionButtons, MainInfo } from '@/components/Me'
-import EditableSection from '@/components/Onboarding/EditableSection'
 
 import { useUserStore } from '@/stores'
 import { Button } from '@mui/material'
@@ -21,21 +20,6 @@ const Me = () => {
   const [name, setName] = useState(userData?.name ?? '')
   const [email, setEmail] = useState(userData?.email ?? '')
   const [confirmDialogOpen, toggleConfirmDialog] = useToggle()
-  const { healthData } = userData || {}
-  const { healthInfos } = healthData || {}
-
-  const handleHealthInfoUpdate = async (key: keyof HealthInfos, newData: string[]) => {
-    await updateProfile({
-      healthData: {
-        ...userData?.healthData,
-        healthInfos: {
-          ...userData?.healthData?.healthInfos,
-          [key]: newData,
-        },
-        dateOfBirth: userData?.healthData?.dateOfBirth ?? '',
-      },
-    })
-  }
 
   const handleSave = async () => {
     if (name !== userData?.name || email !== userData?.email) {
@@ -83,20 +67,6 @@ const Me = () => {
         onCancel={() => setEditing(false)}
         onEdit={() => setEditing(true)}
       />
-      {/* Editable Health Info */}
-      <Box mt={3}>
-        <Box sx={{ p: 2, backgroundColor: '#FAFAFC', borderRadius: 1 }}>
-          <Box sx={{ fontWeight: 'bold', mb: 1 }}>Medical Information</Box>
-          {Object.entries(healthInfos || {}).map(([key, items]) => (
-            <EditableSection
-              key={key}
-              title={key as keyof HealthInfos}
-              items={items as string[]}
-              onSave={async newData => handleHealthInfoUpdate(key as keyof HealthInfos, newData)}
-            />
-          ))}
-        </Box>
-      </Box>
 
       {/* Signout button */}
       <Box display="flex" justifyContent="center" mt={4}>

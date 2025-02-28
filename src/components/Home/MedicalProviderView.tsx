@@ -69,7 +69,6 @@ const MedicalProviderView = ({
         ))}
       </CardContent>
     </Card>
-
   )
 }
 

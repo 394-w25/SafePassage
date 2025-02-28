@@ -2,7 +2,6 @@ type UserType = 'admin' | 'user'
 
 interface HealthInfos {
   allergies?: string[]
-  medications?: string[]
   medicalConditions?: string[]
   pastSurgeries?: string[]
   medicalDevices?: string[]
@@ -15,10 +14,19 @@ interface Contact {
   phone: string
 }
 
+interface Medication {
+  id: number
+  name: string
+  dosage?: string
+  frequency?: number
+  time?: string
+}
+
 interface HealthData {
   dateOfBirth: string
   healthInfos?: HealthInfos
   contacts?: Contact[]
+  medications?: Medication[]
 }
 
 interface UserProfile {
