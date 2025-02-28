@@ -24,7 +24,7 @@ interface HealthHistoryContextType {
   addMedication: () => void
   updateMedication: <K extends keyof Medication>(id: number, field: K, value: Medication[K]) => void
   removeMedication: (id: number) => void
-  submitProfile: (navigate: NavigateFunction) => void
+  submitProfile: (navigate?: NavigateFunction) => void
 }
 
 const HealthHistoryContext = createContext<HealthHistoryContextType | undefined>(
@@ -37,18 +37,21 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
   const [basicInfo, setBasicInfo] = useState<BasicInfo>({
     name: user?.name ?? '',
+    dateOfBirth: user?.healthData?.dateOfBirth ?? '',
   })
 
-  const [healthInfos, setHealthInfos] = useState<HealthInfos>({
-    allergies: [],
-    medicalConditions: [],
-    pastSurgeries: [],
-    medicalDevices: [],
-  })
+  const [healthInfos, setHealthInfos] = useState<HealthInfos>(
+    user?.healthData?.healthInfos ?? {
+      allergies: [],
+      medicalConditions: [],
+      pastSurgeries: [],
+      medicalDevices: [],
+    },
+  )
 
-  const [contacts, setContacts] = useState<Contact[]>([])
+  const [contacts, setContacts] = useState<Contact[]>(user?.healthData?.contacts ?? [])
 
-  const [medications, setMedications] = useState<Medication[]>([])
+  const [medications, setMedications] = useState<Medication[]>(user?.healthData?.medications ?? [])
 
   const updateBasicInfo = (name?: string, dateOfBirth?: Date) => {
     // Format date to 'YYYY-MM-DD'
@@ -120,7 +123,7 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
     )
   }
 
-  const submitProfile = async (navigate: NavigateFunction) => {
+  const submitProfile = async (navigate?: NavigateFunction) => {
     if (basicInfo.dateOfBirth === undefined) {
       toast.error('Please provide your date of birth.')
       return
@@ -217,9 +220,17 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
       updates.name = basicInfo.name
     }
 
+    // Check differences between the current user and the updated user
+    if (JSON.stringify(user) === JSON.stringify(updates)) {
+      toast.info('No changes detected.')
+      return
+    }
+
     try {
       await updateProfile(updates)
-      await navigate('/')
+      if (navigate) {
+        await navigate('/')
+      }
     }
     catch (error) {
       toast.error('Profile update failed.')
