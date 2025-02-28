@@ -14,20 +14,22 @@ export interface CustomInputFieldProps<T> {
   inputLabel?: SlotProps<React.ElementType<InputLabelProps>, object, TextFieldOwnerState>
 }
 
-const formatValue = (value: string | Date | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
-  if (value === undefined || typeof value === 'string' || typeof value === 'number') {
+const formatValue = (value: string | Date | number | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
+  if (value === undefined || value === null) {
+    return value
+  }
+  if (typeof value === 'string' || typeof value === 'number') {
     return type === 'tel' ? formatPhoneNumber(value as string) : value
   }
-  if (type === 'date') {
-    return value.toISOString().split('T')[0] // YYYY-MM-DD
-  }
-  if (type === 'time') {
-    return value.toISOString().split('T')[1].slice(0, 5) // HH:MM
+  if (value instanceof Date) {
+    if (type === 'date') {
+      return value.toISOString().split('T')[0] // YYYY-MM-DD
+    }
   }
   return value.toString()
 }
 
-const CustomInputField = <T extends string | Date>({
+const CustomInputField = <T extends string | number | Date>({
   label,
   onChange,
   value,
@@ -38,14 +40,22 @@ const CustomInputField = <T extends string | Date>({
   sx,
   inputLabel,
 }: CustomInputFieldProps<T>) => {
-  const handleChange = (newValue: string) => {
-    let formattedValue: string | Date = newValue
-    if (type === 'date' || type === 'time') {
-      formattedValue = new Date(`${newValue}T00:00:00Z`)
+  const handleChange = (newValue: string): void => {
+    let formattedValue: string | Date | number | undefined = newValue
+
+    if (type === 'date') {
+      formattedValue = new Date(`${newValue}T00:00:00Z`) // YYYY-MM-DD
+    }
+    else if (type === 'time') {
+      formattedValue = newValue // HH:MM
     }
     else if (type === 'tel') {
       formattedValue = formatPhoneNumber(newValue)
     }
+    else if (type === 'number') {
+      formattedValue = newValue === '' ? undefined : Number(newValue)
+    }
+
     onChange(formattedValue as T)
   }
 

@@ -1,4 +1,4 @@
-import { formatTitleCase } from '@/utils/onboardingUtils' // 格式化标题工具
+import { formatTitleCase } from '@/utils/onboardingUtils'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
@@ -107,7 +107,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                     <List dense sx={{ py: 0, pl: 1 }}>
                       {items.map((item, index) => (
                         // eslint-disable-next-line react/no-array-index-key
-                        <ListItem key={index} sx={{ pl: 0, py: 0, display: 'flex', alignItems: 'center' }}>
+                        <ListItem key={`${title}-${index}`} sx={{ pl: 0, py: 0, display: 'flex', alignItems: 'center' }}>
                           <Typography variant="body2" color="textPrimary" sx={{ mr: 1 }}>
                             •
                           </Typography>
@@ -148,7 +148,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
                     <List dense>
                       {items.map((item, index) => (
                         // eslint-disable-next-line react/no-array-index-key
-                        <ListItem key={index} sx={{ pl: 0, py: 0 }}>
+                        <ListItem key={`${title}-${index}`} sx={{ pl: 0, py: 0 }}>
                           <ListItemText primary={item} />
                         </ListItem>
                       ))}
@@ -168,7 +168,7 @@ const EditableSection = ({ title, items, onSave }: EditableSectionProps) => {
 
           {newItems.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Box key={`${title}-${index}`} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <TextField
                 fullWidth
                 variant="outlined"

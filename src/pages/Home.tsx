@@ -1,4 +1,4 @@
-import { LanguageToggle, MedicalProviderView, QRCode } from '@/components/Home'
+import { LanguageToggle, MedicalProviderView, MedicationInfos, QRCode } from '@/components/Home'
 import EmergencyContacts from '@/components/Home/EmergencyContacts'
 import { useUserStore } from '@/stores'
 import { Box } from '@mui/material'
@@ -11,7 +11,7 @@ const Home = () => {
   }
 
   const { uid, name, profilePic, healthData } = userData
-  const { dateOfBirth, healthInfos, contacts } = healthData || {}
+  const { dateOfBirth, healthInfos, contacts, medications } = healthData || {}
 
   return (
     <Box sx={{ px: 2, py: 3 }}>
@@ -25,6 +25,8 @@ const Home = () => {
         dateOfBirth={dateOfBirth}
         healthInfos={healthInfos}
       />
+
+      <MedicationInfos medications={medications} />
 
       <EmergencyContacts contacts={contacts} />
 

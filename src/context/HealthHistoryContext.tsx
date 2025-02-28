@@ -18,8 +18,12 @@ interface HealthHistoryContextType {
   updateHealthInfos: (newHealthInfos: Partial<HealthInfos>) => void
   contacts: Contact[]
   addContact: () => void
-  updateContact: (id: number, field: keyof Contact, value: string) => void
+  updateContact: <K extends keyof Contact>(id: number, field: K, value: Contact[K]) => void
   removeContact: (id: number) => void
+  medications: Medication[]
+  addMedication: () => void
+  updateMedication: <K extends keyof Medication>(id: number, field: K, value: Medication[K]) => void
+  removeMedication: (id: number) => void
   submitProfile: (navigate: NavigateFunction) => void
 }
 
@@ -37,13 +41,14 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
   const [healthInfos, setHealthInfos] = useState<HealthInfos>({
     allergies: [],
-    medications: [],
     medicalConditions: [],
     pastSurgeries: [],
     medicalDevices: [],
   })
 
   const [contacts, setContacts] = useState<Contact[]>([])
+
+  const [medications, setMedications] = useState<Medication[]>([])
 
   const updateBasicInfo = (name?: string, dateOfBirth?: Date) => {
     // Format date to 'YYYY-MM-DD'
@@ -65,17 +70,6 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
     )
   }
 
-  const updateContact = (id: number, field: keyof Contact, value: string) => {
-    setContacts(prev =>
-      produce(prev, (draft) => {
-        const contact = draft.find(c => c.id === id)
-        if (contact) {
-          (contact[field] as string) = value
-        }
-      }),
-    )
-  }
-
   const addContact = () => {
     setContacts(prev =>
       produce(prev, (draft) => {
@@ -84,9 +78,45 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
     )
   }
 
+  const updateContact = <K extends keyof Contact>(id: number, field: K, value: Contact[K]) => {
+    setContacts(prev =>
+      produce(prev, (draft) => {
+        const contact = draft.find(c => c.id === id)
+        if (contact) {
+          contact[field] = value
+        }
+      }),
+    )
+  }
+
   const removeContact = (id: number) => {
     setContacts(prev =>
       produce(prev, draft => draft.filter(contact => contact.id !== id)),
+    )
+  }
+
+  const addMedication = () => {
+    setMedications(prev =>
+      produce(prev, (draft) => {
+        draft.push({ id: Date.now(), name: '', dosage: undefined, frequency: undefined, time: undefined })
+      }),
+    )
+  }
+
+  const updateMedication = <K extends keyof Medication>(id: number, field: K, value: Medication[K]) => {
+    setMedications(prev =>
+      produce(prev, (draft) => {
+        const medication = draft.find(m => m.id === id)
+        if (medication) {
+          medication[field] = value
+        }
+      }),
+    )
+  }
+
+  const removeMedication = (id: number) => {
+    setMedications(prev =>
+      produce(prev, draft => draft.filter(medication => medication.id !== id)),
     )
   }
 
@@ -148,6 +178,24 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
       }
     })
 
+    const validatedMedications = medications.reduce<Medication[]>((acc, med, index) => {
+      if (!med.id || !med.name.trim()) {
+        toast.error(`Medication ${index + 1} is missing an ID or Name.`)
+        hasError = true
+        return acc
+      }
+
+      acc.push({
+        id: med.id,
+        name: med.name.trim(),
+        dosage: med.dosage?.trim() ?? undefined,
+        frequency: med.frequency ?? undefined,
+        time: med.time?.trim() ?? undefined,
+      })
+
+      return acc
+    }, [])
+
     // If errors exist, prevent submission
     if (hasError) {
       return
@@ -157,6 +205,7 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
       dateOfBirth: basicInfo.dateOfBirth,
       healthInfos: updatedData.healthInfos,
       contacts: updatedData.contacts,
+      medications: validatedMedications,
     }
 
     const updates: Partial<UserProfile> = {
@@ -189,6 +238,10 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
         addContact,
         updateContact,
         removeContact,
+        medications,
+        addMedication,
+        updateMedication,
+        removeMedication,
         submitProfile,
       }}
     >
