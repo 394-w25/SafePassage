@@ -102,7 +102,7 @@ const useUserStore = create<UserState>()(
         try {
           await updateDocument(currentUser.uid, 'users', updates)
           set({ user: { ...currentUser, ...updates } })
-          if (updates.onboarded) {
+          if (!currentUser.onboarded) {
             toast.success('Profile setup completed!\nYou can now access your dashboard.')
           }
           else {
