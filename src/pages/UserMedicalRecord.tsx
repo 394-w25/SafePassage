@@ -1,5 +1,5 @@
 import { LoadingCircle } from '@/components/common'
-import { LanguageToggle, MedicalProviderView } from '@/components/Home'
+import { LanguageToggle, MedicalProviderView, MedicationInfos } from '@/components/Home'
 import EmergencyContacts from '@/components/Home/EmergencyContacts'
 import { useEmergencyAlert } from '@/hooks'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
@@ -25,7 +25,7 @@ const UserMedicalRecord = () => {
   }
 
   const { healthData, name, profilePic } = userData
-  const { dateOfBirth, healthInfos, contacts } = healthData || {}
+  const { dateOfBirth, healthInfos, contacts, medications } = healthData || {}
 
   return (
     <Box sx={{ px: 2, py: 3 }}>
@@ -41,6 +41,8 @@ const UserMedicalRecord = () => {
         dateOfBirth={dateOfBirth}
         healthInfos={healthInfos}
       />
+
+      <MedicationInfos medications={medications} />
 
       <EmergencyContacts contacts={contacts} />
 
