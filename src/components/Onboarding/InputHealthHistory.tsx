@@ -35,11 +35,9 @@ const InputHealthHistory = () => {
           <CustomInputField
             label="Date of Birth"
             type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
             value={basicInfo.dateOfBirth}
             onChange={value => updateBasicInfo(undefined, new Date(value))}
+            InputLabelProps={{ shrink: true }}
           />
 
         </CardContent>
@@ -63,7 +61,7 @@ const InputHealthHistory = () => {
         />
         <Divider sx={{ backgroundColor: '#FAFAFC' }} />
         <CardContent sx={{ py: 0.5, px: 1.5 }}>
-          {Object.entries(healthInfos).map(([key, items]) => (
+          {Object.entries(healthInfos).sort().map(([key, items]) => (
             <EditableSection
               key={key}
               title={key as keyof HealthInfos}

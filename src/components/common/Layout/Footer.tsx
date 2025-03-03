@@ -1,3 +1,4 @@
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
 import { BottomNavigationAction } from '@mui/material'
@@ -11,8 +12,11 @@ const getPageIndex = (path: string) => {
     case '/': {
       return 0
     }
-    case '/user': {
+    case '/trip': {
       return 1
+    }
+    case '/user': {
+      return 2
     }
     default: {
       return 0
@@ -31,6 +35,13 @@ const Footer = () => {
       icon={<HomeIcon />}
       component={Link}
       to="/"
+    />,
+    <BottomNavigationAction
+      key="trip"
+      label="Trip"
+      icon={<AccessTimeIcon />}
+      component={Link}
+      to="/trip"
     />,
     <BottomNavigationAction
       key="user"

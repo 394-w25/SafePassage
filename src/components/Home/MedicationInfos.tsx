@@ -1,41 +1,42 @@
 import { Card, CardContent, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
 import React from 'react'
 
-interface EmergencyContactsProps {
-  contacts: Contact[] | undefined
+interface MedicationInfosProps {
+  medications: Medication[] | undefined
 }
 
-const EmergencyContacts = ({ contacts }: EmergencyContactsProps) => {
+const MedicationInfos = ({ medications }: MedicationInfosProps) => {
   return (
     <Card elevation={2} sx={{ borderRadius: 2, mt: 3 }}>
       <CardContent>
         <Typography variant="h6" fontWeight="bold" sx={{ color: 'primary.main', mb: 1.2 }}>
-          Emergency Contacts
+          Medication Infos
         </Typography>
 
-        {Array.isArray(contacts) && contacts.length > 0
+        {Array.isArray(medications) && medications.length > 0
           ? (
               <List dense sx={{ bgcolor: '#FAF9F6', borderRadius: 1, p: 1 }}>
-                {contacts.map((contact, index) => (
-                  <React.Fragment key={contact.id}>
+                {medications.map((medication, index) => (
+                  <React.Fragment key={medication.id}>
                     <ListItem disablePadding>
                       <ListItemText
-                        primary={contact.name}
-                        secondary={contact.relationship}
+                        primary={medication.name}
+                        secondary={medication.dosage}
                       />
                       <ListItemText
-                        primary={contact.phone}
+                        primary={`Each ${medication.frequency} days`}
+                        secondary={medication.time}
                         sx={{ textAlign: 'right' }}
                       />
                     </ListItem>
-                    {index < contacts.length - 1 && <Divider />}
+                    {index < medications.length - 1 && <Divider />}
                   </React.Fragment>
                 ))}
               </List>
             )
           : (
               <Typography variant="body2" color="text.secondary">
-                No emergency contacts available.
+                No medications available.
               </Typography>
             )}
       </CardContent>
@@ -43,4 +44,4 @@ const EmergencyContacts = ({ contacts }: EmergencyContactsProps) => {
   )
 }
 
-export default EmergencyContacts
+export default MedicationInfos

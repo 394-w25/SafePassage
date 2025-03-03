@@ -38,32 +38,34 @@ const CustomInputField = <T extends string | Date>({
   size = 'small',
   sx,
   InputLabelProps,
-}: CustomInputFieldProps<T>) => (
-  <TextField
-    label={label}
-    type={type}
-    value={formatValue(value, type)}
-    variant="outlined"
-    onChange={(event_) => {
-      let newValue: string | Date = event_.target.value
-      if (type === 'date' || type === 'time') {
-        newValue = new Date(`${event_.target.value}T00:00:00Z`)
-      }
-      onChange(newValue as T)
-    }}
-    size={size}
-    InputLabelProps={InputLabelProps}
-    required={required}
-    fullWidth
-    margin="normal"
-    sx={sx}
-    onKeyDown={(event_) => {
-      if (event_.key === 'Enter') {
-        event_.preventDefault()
-        onEnterPress?.()
-      }
-    }}
-  />
-)
+}: CustomInputFieldProps<T>) => {
+  return (
+    <TextField
+      label={label}
+      type={type}
+      value={formatValue(value, type)}
+      variant="outlined"
+      onChange={(event_) => {
+        const newValue: string | Date = event_.target.value
+        // if (type === 'date' || type === 'time') {
+        //   newValue = new Date(`${event_.target.value}T00:00:00Z`)
+        // }
+        onChange(newValue as T)
+      }}
+      size={size}
+      InputLabelProps={InputLabelProps}
+      required={required}
+      fullWidth
+      margin="normal"
+      sx={sx}
+      onKeyDown={(event_) => {
+        if (event_.key === 'Enter') {
+          event_.preventDefault()
+          onEnterPress?.()
+        }
+      }}
+    />
+  )
+}
 
 export default CustomInputField

@@ -1,5 +1,5 @@
 import type { DocumentData, WithFieldValue } from 'firebase/firestore'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore'
 
 import { db } from './firebaseConfig'
 
@@ -83,4 +83,35 @@ const updateDocument = async <T>(
   }
 }
 
-export { getDocument, getOrCreateDocument, updateDocument }
+/**
+ * Listen for updates to a document in Firestore.
+ *
+ * @param collection The collection to listen for updates in
+ * @param docId The unique identifier for the document
+ * @param onUpdate Callback to be called when the document is updated (undefined if it doesn't exist)
+ * @param onError Optional callback to be called if an error occurs
+ * @returns A function to unsubscribe from the listener
+ */
+const subscribeToDocument = <T>(
+  collection: string,
+  docId: string,
+  onUpdate: (data: T | undefined) => void,
+  onError?: (error: Error) => void,
+): (() => void) => {
+  const docRef = doc(db, collection, docId)
+  const unsubscribe = onSnapshot(
+    docRef,
+    (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        onUpdate(docSnapshot.data() as T)
+      }
+      else {
+        onUpdate(undefined)
+      }
+    },
+    onError,
+  )
+  return unsubscribe
+}
+
+export { getDocument, getOrCreateDocument, subscribeToDocument, updateDocument }

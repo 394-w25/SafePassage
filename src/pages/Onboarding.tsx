@@ -1,4 +1,4 @@
-import { AddFamilyContacts, BottomController, InputHealthHistory } from '@/components/Onboarding'
+import { AddFamilyContacts, BottomController, InputHealthHistory, InputMedications, InputTravel } from '@/components/Onboarding'
 import { HealthHistoryProvider } from '@/context'
 import {
   Box,
@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 
-const steps = ['Input Health History', 'Add Your Family']
+const steps = ['Health History', 'Medications', 'Travel', 'Emergency Contacts']
 
 const Onboarding = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -27,9 +27,11 @@ const Onboarding = () => {
           </Stepper>
 
           {activeStep === 0 && <InputHealthHistory />}
-          {activeStep === 1 && <AddFamilyContacts />}
+          {activeStep === 1 && <InputMedications />}
+          {activeStep === 2 && <InputTravel />}
+          {activeStep === 3 && <AddFamilyContacts />}
 
-          <BottomController activeStep={activeStep} setActiveStep={setActiveStep} />
+          <BottomController stepsCount={steps.length} activeStep={activeStep} setActiveStep={setActiveStep} />
         </Box>
       </Container>
     </HealthHistoryProvider>

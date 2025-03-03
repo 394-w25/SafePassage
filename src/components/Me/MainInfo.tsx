@@ -1,77 +1,110 @@
-import { Avatar, Box, TextField, Typography } from '@mui/material'
+import { calculateAge } from '@/utils/onboardingUtils'
+import { Avatar, Box, Card, CardContent, Divider, Grid2 as Grid, Typography } from '@mui/material'
 
 interface MainInfoProps {
-  editing: boolean
-  displayName: string
-  email: string
-  userData: UserProfile | null
-  onChangeDisplayName: (value: string) => void
-  onChangeEmail: (value: string) => void
+  displayName: string | undefined
+  email: string | undefined
+  profilePic: string | undefined
+  healthData: HealthData | undefined
 }
 
-const MainInfo = ({
-  editing,
-  displayName,
-  email,
-  userData,
-  onChangeDisplayName,
-  onChangeEmail,
-}: MainInfoProps) => {
+const MainInfo = ({ displayName, email, profilePic, healthData }: MainInfoProps) => {
+  const age = calculateAge(healthData?.dateOfBirth)
+
+  const medicationCount = healthData?.medications?.length ?? 0
+  const allergiesCount = healthData?.healthInfos?.allergies?.length ?? 0
+  const pastSurgeriesCount = healthData?.healthInfos?.pastSurgeries?.length ?? 0
+  const medicalConditionsCount = healthData?.healthInfos?.medicalConditions?.length ?? 0
+  const medicalDevicesCount = healthData?.healthInfos?.medicalDevices?.length ?? 0
+  const emergencyContactsCount = healthData?.contacts?.length ?? 0
+
   return (
-    <Box
-      sx={{
-        maxWidth: 400,
-        mx: 'auto',
-      }}
-    >
+    <Box sx={{ maxWidth: 500, mx: 'auto', textAlign: 'center', p: 3 }}>
       <Box display="flex" justifyContent="center" mb={3}>
         <Avatar
-          src={userData?.profilePic ?? ''}
+          src={profilePic ?? ''}
           alt={displayName}
-          sx={{ width: 120, height: 120 }}
+          sx={{
+            width: 120,
+            height: 120,
+            boxShadow: 3,
+            border: '4px solid #fff',
+          }}
         />
       </Box>
-      {editing
-        ? (
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              }}
-            >
-              <TextField
-                label="Display Name"
-                value={displayName}
-                onChange={event_ => onChangeDisplayName(event_.target.value)}
-                fullWidth
-                variant="outlined"
-              />
-              <TextField
-                label="Email"
-                value={email}
-                onChange={event_ => onChangeEmail(event_.target.value)}
-                fullWidth
-                variant="outlined"
-              />
-            </Box>
-          )
-        : (
-            <Box
-              sx={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {displayName || 'NA'}
-              </Typography>
+
+      {/* Basic Info */}
+      <Typography variant="h5" sx={{ fontWeight: 700, color: 'primary.main' }}>
+        {displayName ?? 'N/A'}
+      </Typography>
+      <Typography variant="body1" color="text.secondary">
+        {email ?? 'N/A'}
+      </Typography>
+      <Typography variant="body1" color="text.secondary" mb={2}>
+        {age}
+        {' '}
+        years old
+      </Typography>
+
+      {/* Health Summary */}
+      <Card sx={{ mt: 3, borderRadius: 2, boxShadow: 3 }}>
+        <CardContent>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+            Health Summary
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Grid container spacing={2} justifyContent="center">
+            <Grid size={{ xs: 6 }}>
               <Typography variant="body2" color="text.secondary">
-                {userData?.email ?? 'NA'}
+                Allergies
               </Typography>
-            </Box>
-          )}
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {allergiesCount}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
+              <Typography variant="body2" color="text.secondary">
+                Surgeries
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {pastSurgeriesCount}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
+              <Typography variant="body2" color="text.secondary">
+                Conditions
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {medicalConditionsCount}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
+              <Typography variant="body2" color="text.secondary">
+                Devices
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {medicalDevicesCount}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
+              <Typography variant="body2" color="text.secondary">
+                Medications
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {medicationCount}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 6 }}>
+              <Typography variant="body2" color="text.secondary">
+                Emergency Contacts
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {emergencyContactsCount}
+              </Typography>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
     </Box>
   )
 }
