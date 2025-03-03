@@ -94,7 +94,7 @@ const UpdateTravelDialog = (props: UpdateTravelDialogProps) => {
     }
     finally {
       setLoadingCities(false)
-      setSelectedCity(travelInfo.city!)
+      setSelectedCity(travelInfo.city)
     }
   }
 
@@ -107,8 +107,8 @@ const UpdateTravelDialog = (props: UpdateTravelDialogProps) => {
       // 按国家名称排序
       const sortedCountries = [...data].sort((a, b) => a.name.common.localeCompare(b.name.common))
       setCountries(sortedCountries)
-      setSelectedCountry(travelInfo.country!)
-      void fetchCitiesByCountry(travelInfo.countryName!)
+      setSelectedCountry(travelInfo.country)
+      void fetchCitiesByCountry(travelInfo.countryName)
     }
     catch (error) {
       console.error('Error fetching countries:', error)
@@ -197,7 +197,7 @@ const UpdateTravelDialog = (props: UpdateTravelDialogProps) => {
         <CustomInputField
           label="Start Date"
           type="date"
-          InputLabelProps={{
+          inputLabel={{
             shrink: true,
           }}
           value={travelInfo.startDate}
@@ -207,7 +207,7 @@ const UpdateTravelDialog = (props: UpdateTravelDialogProps) => {
         <CustomInputField
           label="End Date"
           type="date"
-          InputLabelProps={{
+          inputLabel={{
             shrink: true,
           }}
           value={travelInfo.endDate}

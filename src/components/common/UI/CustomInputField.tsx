@@ -1,7 +1,8 @@
-import type { SxProps, TextFieldProps, Theme } from '@mui/material'
+import type { InputLabelProps, SlotProps, SxProps, TextFieldOwnerState, TextFieldProps, Theme } from '@mui/material'
+import { formatPhoneNumber, isValidUSPhoneNumber } from '@/utils/onboardingUtils'
 import TextField from '@mui/material/TextField'
 
-interface CustomInputFieldProps<T> {
+export interface CustomInputFieldProps<T> {
   label: string
   onChange: (value: T) => void
   value?: T
@@ -10,25 +11,25 @@ interface CustomInputFieldProps<T> {
   required?: boolean
   sx?: SxProps<Theme>
   size?: TextFieldProps['size']
-  InputLabelProps?: TextFieldProps['InputLabelProps']
+  inputLabel?: SlotProps<React.ElementType<InputLabelProps>, object, TextFieldOwnerState>
 }
 
-const formatValue = (value: string | Date | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
-  if (value === undefined || typeof value === 'string' || typeof value === 'number') {
+const formatValue = (value: string | Date | number | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
+  if (value === undefined || value === null) {
     return value
   }
-  if (type === 'date') {
-    // Format as "yyyy-MM-dd"
-    return value.toISOString().split('T')[0]
+  if (typeof value === 'string' || typeof value === 'number') {
+    return type === 'tel' ? formatPhoneNumber(value as string) : value
   }
-  if (type === 'time') {
-    // Format as "HH:mm"
-    return value.toISOString().split('T')[1].slice(0, 5)
+  if (value instanceof Date) {
+    if (type === 'date') {
+      return value.toISOString().split('T')[0] // YYYY-MM-DD
+    }
   }
   return value.toString()
 }
 
-const CustomInputField = <T extends string | Date>({
+const CustomInputField = <T extends string | number | Date>({
   label,
   onChange,
   value,
@@ -37,27 +38,46 @@ const CustomInputField = <T extends string | Date>({
   required = false,
   size = 'small',
   sx,
-  InputLabelProps,
+  inputLabel,
 }: CustomInputFieldProps<T>) => {
+  const handleChange = (newValue: string): void => {
+    let formattedValue: string | Date | number | undefined = newValue
+
+    if (type === 'date') {
+      formattedValue = new Date(`${newValue}T00:00:00Z`) // YYYY-MM-DD
+    }
+    else if (type === 'time') {
+      formattedValue = newValue // HH:MM
+    }
+    else if (type === 'tel') {
+      formattedValue = formatPhoneNumber(newValue)
+    }
+    else if (type === 'number') {
+      formattedValue = newValue === '' ? undefined : Number(newValue)
+    }
+
+    onChange(formattedValue as T)
+  }
+
   return (
     <TextField
       label={label}
       type={type}
       value={formatValue(value, type)}
       variant="outlined"
-      onChange={(event_) => {
-        const newValue: string | Date = event_.target.value
-        // if (type === 'date' || type === 'time') {
-        //   newValue = new Date(`${event_.target.value}T00:00:00Z`)
-        // }
-        onChange(newValue as T)
-      }}
-      size={size}
-      InputLabelProps={InputLabelProps}
+      error={type === 'tel' && Boolean(value) && !isValidUSPhoneNumber(value as string)}
+      helperText={
+        type === 'tel' && Boolean(value) && !isValidUSPhoneNumber(value as string)
+          ? 'Please enter in this format (XXX) XXX-XXXX'
+          : ''
+      }
       required={required}
       fullWidth
       margin="normal"
       sx={sx}
+      size={size}
+      slotProps={{ inputLabel }}
+      onChange={event_ => handleChange(event_.target.value)}
       onKeyDown={(event_) => {
         if (event_.key === 'Enter') {
           event_.preventDefault()

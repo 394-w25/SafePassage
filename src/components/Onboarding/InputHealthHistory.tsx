@@ -37,7 +37,7 @@ const InputHealthHistory = () => {
             type="date"
             value={basicInfo.dateOfBirth}
             onChange={value => updateBasicInfo(undefined, new Date(value))}
-            InputLabelProps={{ shrink: true }}
+            inputLabel={{ shrink: true }}
           />
 
         </CardContent>

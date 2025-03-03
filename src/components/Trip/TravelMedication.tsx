@@ -69,9 +69,9 @@ const TravelMedication = ({ travel }: Props) => {
         </CardContent>
       </Card>
 
-      <HealthHistoryProvider>
+      {/* <HealthHistoryProvider>
         <UpdateTravelDialog open={open} onCancel={() => setOpen(false)} onSuccess={() => setOpen(false)} />
-      </HealthHistoryProvider>
+      </HealthHistoryProvider> */}
     </Box>
   )
 }

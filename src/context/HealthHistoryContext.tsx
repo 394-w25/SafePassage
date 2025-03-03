@@ -17,7 +17,6 @@ interface HealthHistoryContextType {
   healthInfos: HealthInfos
   updateHealthInfos: (newHealthInfos: Partial<HealthInfos>) => void
   contacts: Contact[]
-  updateTravelInfo: (newTravielInfos: Partial<TravelInfo>) => void
   addContact: () => void
   updateContact: <K extends keyof Contact>(id: number, field: K, value: Contact[K]) => void
   removeContact: (id: number) => void
@@ -26,8 +25,6 @@ interface HealthHistoryContextType {
   updateMedication: <K extends keyof Medication>(id: number, field: K, value: Medication[K]) => void
   removeMedication: (id: number) => void
   submitProfile: (navigate?: NavigateFunction) => void
-  travelInfo: TravelInfo
-  submitProfileTravelInfo: (updatesInfo?: Partial<TravelInfo>) => void | Promise<void>
 }
 
 const HealthHistoryContext = createContext<HealthHistoryContextType | undefined>(
@@ -51,16 +48,6 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
       medicalDevices: [],
     },
   )
-
-  const travelData: TravelInfo | undefined = user?.travelData
-
-  const [travelInfo, setTravelInfo] = useState<TravelInfo>({
-    startDate: travelData?.startDate ?? '',
-    endDate: travelData?.endDate ?? '',
-    country: travelData?.country ?? '',
-    countryName: travelData?.countryName ?? '',
-    city: travelData?.city ?? '',
-  })
 
   const [contacts, setContacts] = useState<Contact[]>(user?.healthData?.contacts ?? [])
 
@@ -226,7 +213,6 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
     const updates: Partial<UserProfile> = {
       healthData,
-      travelData: travelInfo,
       onboarded: true,
     }
 
@@ -251,36 +237,6 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
       console.error('Profile update failed:', error)
     }
   }
-  const updateTravelInfo = (newTravielInfos: Partial<TravelInfo>) => {
-    setTravelInfo(prev =>
-      produce(prev, (draft) => {
-        Object.keys(newTravielInfos).forEach((key) => {
-          const category = key as keyof TravelInfo
-          // eslint-disable-next-line ts/ban-ts-comment
-          // @ts-ignore
-          draft[category] = newTravielInfos[category]
-        })
-      }),
-    )
-  }
-
-  const submitProfileTravelInfo = async (updatesInfo?: Partial<TravelInfo>) => {
-    if (user) {
-      const updates: Partial<UserProfile> = {
-        travelData: {
-          ...user.travelData as TravelInfo,
-          ...updatesInfo,
-        },
-      }
-      try {
-        await updateProfile(updates)
-      }
-      catch (error) {
-        toast.error('Profile update failed.')
-        console.error('Profile update failed:', error)
-      }
-    }
-  }
 
   return (
     <HealthHistoryContext
@@ -298,9 +254,6 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
         updateMedication,
         removeMedication,
         submitProfile,
-        travelInfo,
-        updateTravelInfo,
-        submitProfileTravelInfo,
       }}
     >
       {children}
