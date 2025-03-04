@@ -22,6 +22,14 @@ interface Medication {
   time?: string
 }
 
+interface Trip {
+  id: number
+  country: string
+  city?: string
+  startDate: string
+  endDate: string
+}
+
 interface HealthData {
   dateOfBirth: string
   healthInfos?: HealthInfos
@@ -38,4 +46,5 @@ interface UserProfile {
   role: UserType
   onboarded: boolean
   healthData?: HealthData
+  trips?: Trip[]
 }

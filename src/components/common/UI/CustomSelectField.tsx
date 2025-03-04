@@ -7,7 +7,7 @@ import Select from '@mui/material/Select'
 
 interface CustomSelectFieldProps<T> {
   label: string
-  value: T
+  value?: T
   onChange: (value: T) => void
   options: T[]
   required?: boolean
