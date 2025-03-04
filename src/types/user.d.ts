@@ -22,9 +22,9 @@ interface Medication {
   time?: string
 }
 
-interface TravelInfo {
-  countryName?: string
-  country?: string
+interface Trip {
+  id: number
+  country: string
   city?: string
   startDate: string
   endDate: string
@@ -46,5 +46,5 @@ interface UserProfile {
   role: UserType
   onboarded: boolean
   healthData?: HealthData
-  travelData?: TravelInfo
+  trips?: Trip[]
 }

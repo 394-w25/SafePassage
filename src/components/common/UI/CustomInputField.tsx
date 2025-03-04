@@ -11,21 +11,49 @@ export interface CustomInputFieldProps<T> {
   required?: boolean
   sx?: SxProps<Theme>
   size?: TextFieldProps['size']
+  noEarlierThanToday?: boolean // Prevents selection of past date/time
+  validationError?: string // Custom error message
   inputLabel?: SlotProps<React.ElementType<InputLabelProps>, object, TextFieldOwnerState>
 }
 
-const formatValue = (value: string | Date | number | undefined, type: 'date' | 'time' | 'text' | 'number' | 'tel') => {
+const getUserLocalISODate = (date: Date | string): string => {
+  const localDate = new Date(date)
+  return localDate.toISOString().split('T')[0] // YYYY-MM-DD
+}
+
+const getUserLocalISOTimestamp = (): string => {
+  const now = new Date()
+  return now.toTimeString().slice(0, 5)
+}
+
+const formatValue = (
+  value: string | Date | number | undefined,
+  type: 'date' | 'time' | 'text' | 'number' | 'tel',
+): string | undefined => {
   if (value === undefined || value === null) {
+    return ''
+  }
+
+  if (typeof value === 'string') {
+    if (type === 'tel') {
+      return formatPhoneNumber(value)
+    }
+    if (type === 'date' && value.endsWith('Z')) {
+      return getUserLocalISODate(value)
+    }
     return value
   }
-  if (typeof value === 'string' || typeof value === 'number') {
-    return type === 'tel' ? formatPhoneNumber(value as string) : value
+
+  if (typeof value === 'number') {
+    return value.toString()
   }
+
   if (value instanceof Date) {
     if (type === 'date') {
-      return value.toISOString().split('T')[0] // YYYY-MM-DD
+      return getUserLocalISODate(value)
     }
   }
+
   return value.toString()
 }
 
@@ -38,16 +66,21 @@ const CustomInputField = <T extends string | number | Date>({
   required = false,
   size = 'small',
   sx,
+  noEarlierThanToday = false,
+  validationError,
   inputLabel,
 }: CustomInputFieldProps<T>) => {
   const handleChange = (newValue: string): void => {
-    let formattedValue: string | Date | number | undefined = newValue
+    let formattedValue: string | number | undefined = newValue
 
     if (type === 'date') {
-      formattedValue = new Date(`${newValue}T00:00:00Z`) // YYYY-MM-DD
+      const localDate = new Date(`${newValue}T12:00:00`)
+      formattedValue = localDate.toISOString()
     }
     else if (type === 'time') {
-      formattedValue = newValue // HH:MM
+      const today = new Date()
+      const timeDate = new Date(`${today.toISOString().split('T')[0]}T${newValue}`)
+      formattedValue = timeDate.toISOString()
     }
     else if (type === 'tel') {
       formattedValue = formatPhoneNumber(newValue)
@@ -59,24 +92,37 @@ const CustomInputField = <T extends string | number | Date>({
     onChange(formattedValue as T)
   }
 
+  const minValue
+    = type === 'date' && noEarlierThanToday
+      ? getUserLocalISODate(new Date())
+      : type === 'time' && noEarlierThanToday && value?.toString().slice(0, 10) === getUserLocalISODate(new Date())
+        ? getUserLocalISOTimestamp()
+        : undefined
+
   return (
     <TextField
       label={label}
       type={type}
       value={formatValue(value, type)}
       variant="outlined"
-      error={type === 'tel' && Boolean(value) && !isValidUSPhoneNumber(value as string)}
+      error={
+        Boolean(validationError) || (type === 'tel' && Boolean(value) && !isValidUSPhoneNumber(value as string))
+      }
       helperText={
-        type === 'tel' && Boolean(value) && !isValidUSPhoneNumber(value as string)
+        validationError !== undefined
+        || (type === 'tel' && Boolean(value) && !isValidUSPhoneNumber(value as string)
           ? 'Please enter in this format (XXX) XXX-XXXX'
-          : ''
+          : '')
       }
       required={required}
       fullWidth
       margin="normal"
       sx={sx}
       size={size}
-      slotProps={{ inputLabel }}
+      slotProps={{
+        inputLabel,
+        htmlInput: minValue !== undefined ? { min: minValue } : undefined,
+      }}
       onChange={event_ => handleChange(event_.target.value)}
       onKeyDown={(event_) => {
         if (event_.key === 'Enter') {

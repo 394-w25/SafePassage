@@ -1,2 +1,2 @@
-export { default as TravelMedication } from './TravelMedication'
-export { default as UpdateTravelDialog } from './UpdateTravelDialog'
+export { default as TripCard } from './TripCard'
+export { default as TripDialog } from './TripDialog'

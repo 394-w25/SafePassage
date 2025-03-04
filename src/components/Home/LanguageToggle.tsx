@@ -26,7 +26,7 @@ const LanguageToggle = () => {
           'backgroundColor': 'background.paper',
           'borderRadius': 1,
           '& .MuiSelect-select': {
-            // py: 0.5,
+            py: 0.5,
           },
         }}
       >
