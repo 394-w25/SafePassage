@@ -1,5 +1,5 @@
 import { Card, CardContent, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
-import React from 'react'
+import { Fragment } from 'react'
 
 interface MedicationInfosProps {
   medications: Medication[] | undefined
@@ -17,20 +17,19 @@ const MedicationInfos = ({ medications }: MedicationInfosProps) => {
           ? (
               <List dense sx={{ bgcolor: '#FAF9F6', borderRadius: 1, p: 1 }}>
                 {medications.map((medication, index) => (
-                  <React.Fragment key={medication.id}>
+                  <Fragment key={medication.id}>
                     <ListItem disablePadding>
                       <ListItemText
                         primary={medication.name}
                         secondary={medication.dosage}
                       />
                       <ListItemText
-                        primary={`Each ${medication.frequency} days`}
-                        secondary={medication.time}
+                        primary={medication.time}
                         sx={{ textAlign: 'right' }}
                       />
                     </ListItem>
                     {index < medications.length - 1 && <Divider />}
-                  </React.Fragment>
+                  </Fragment>
                 ))}
               </List>
             )

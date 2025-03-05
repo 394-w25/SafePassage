@@ -78,9 +78,7 @@ const CustomInputField = <T extends string | number | Date>({
       formattedValue = localDate.toISOString()
     }
     else if (type === 'time') {
-      const today = new Date()
-      const timeDate = new Date(`${today.toISOString().split('T')[0]}T${newValue}`)
-      formattedValue = timeDate.toISOString()
+      formattedValue = newValue
     }
     else if (type === 'tel') {
       formattedValue = formatPhoneNumber(newValue)

@@ -15,7 +15,7 @@ export const useTrips = () => {
     setTrips(newTrips)
     setLoading(true)
     try {
-      await updateProfile({ trips: newTrips }) // Persist to user profile
+      await updateProfile({ trips: newTrips }, false) // Persist to user profile
     }
     catch (error) {
       console.error('Error updating user profile:', error)
@@ -33,8 +33,8 @@ export const useTrips = () => {
       draft.push({
         ...newData,
         id: newData.id || Date.now(),
-        startDate: newData.startDate,
-        endDate: newData.endDate,
+        startDate: new Date(newData.startDate).toISOString(),
+        endDate: new Date(newData.endDate).toISOString(),
       })
     })
     await updateStore(updatedTrips, 'New trip record added')

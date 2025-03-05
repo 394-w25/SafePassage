@@ -11,7 +11,7 @@ interface UserState {
   error: string | null
   login: (navigate: NavigateFunction) => Promise<void>
   logout: (navigate: NavigateFunction) => Promise<void>
-  updateProfile: (updates: Partial<UserProfile>) => Promise<void>
+  updateProfile: (updates: Partial<UserProfile>, showToast?: boolean) => Promise<void>
   initializeAuthListener: () => () => void
 }
 
@@ -92,7 +92,7 @@ const useUserStore = create<UserState>()(
         }
       },
 
-      updateProfile: async (updates) => {
+      updateProfile: async (updates, showToast = true) => {
         const currentUser = get().user
         if (!currentUser) {
           console.warn('No user is currently logged in.')
@@ -102,11 +102,13 @@ const useUserStore = create<UserState>()(
         try {
           await updateDocument(currentUser.uid, 'users', updates)
           set({ user: { ...currentUser, ...updates } })
-          if (!currentUser.onboarded) {
-            toast.success('Profile setup completed!\nYou can now access your dashboard.')
-          }
-          else {
-            toast.success('Profile updated successfully!')
+          if (showToast) {
+            if (!currentUser.onboarded) {
+              toast.success('Profile setup completed!\nYou can now access your dashboard.')
+            }
+            else {
+              toast.success('Profile updated successfully!')
+            }
           }
         }
         catch (error) {

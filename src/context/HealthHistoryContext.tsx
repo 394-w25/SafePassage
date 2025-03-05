@@ -101,7 +101,7 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   const addMedication = () => {
     setMedications(prev =>
       produce(prev, (draft) => {
-        draft.push({ id: Date.now(), name: '', dosage: undefined, frequency: undefined, time: undefined })
+        draft.push({ id: Date.now(), name: '', dosage: undefined, time: undefined })
       }),
     )
   }
@@ -192,7 +192,6 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
         id: med.id,
         name: med.name.trim(),
         dosage: med.dosage?.trim() ?? undefined,
-        frequency: med.frequency ?? undefined,
         time: med.time?.trim() ?? undefined,
       })
 
