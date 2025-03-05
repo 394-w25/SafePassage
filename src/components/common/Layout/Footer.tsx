@@ -1,6 +1,6 @@
+import EventIcon from '@mui/icons-material/EventAvailable'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
-import PinDropIcon from '@mui/icons-material/PinDrop'
 import { BottomNavigationAction } from '@mui/material'
 import BottomNavigation from '@mui/material/BottomNavigation'
 
@@ -39,7 +39,7 @@ const Footer = () => {
     <BottomNavigationAction
       key="trip"
       label="Trip"
-      icon={<PinDropIcon />}
+      icon={<EventIcon />}
       component={Link}
       to="/trip"
     />,
