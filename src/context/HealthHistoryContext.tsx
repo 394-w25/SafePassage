@@ -9,11 +9,14 @@ import { toast } from 'sonner'
 interface BasicInfo {
   name: string
   dateOfBirth?: string
+  homeCountry?: string
+  homeCity?: string
+  homeTimezone?: string
 }
 
 interface HealthHistoryContextType {
   basicInfo: BasicInfo
-  updateBasicInfo: (name?: string, dateOfBirth?: Date) => void
+  updateBasicInfo: (name?: string, dateOfBirth?: Date, homeCountry?: string, homeCity?: string, homeTimezone?: string) => void
   healthInfos: HealthInfos
   updateHealthInfos: (newHealthInfos: Partial<HealthInfos>) => void
   contacts: Contact[]
@@ -38,6 +41,9 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   const [basicInfo, setBasicInfo] = useState<BasicInfo>({
     name: user?.name ?? '',
     dateOfBirth: user?.healthData?.dateOfBirth ?? '',
+    homeCountry: user?.timeInfo?.homeCountry ?? '',
+    homeCity: user?.timeInfo?.homeCity ?? '',
+    homeTimezone: user?.timeInfo?.homeTimezone ?? '',
   })
 
   const [healthInfos, setHealthInfos] = useState<HealthInfos>(
@@ -53,12 +59,13 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
   const [medications, setMedications] = useState<Medication[]>(user?.healthData?.medications ?? [])
 
-  const updateBasicInfo = (name?: string, dateOfBirth?: Date) => {
-    // Format date to 'YYYY-MM-DD'
-    const formattedDateOfBirth = dateOfBirth?.toISOString().split('T')[0]
+  const updateBasicInfo = (name?: string, dateOfBirth?: Date, homeCountry?: string, homeCity?: string, homeTimezone?: string) => {
     setBasicInfo(prev => ({
       name: name ?? prev.name,
-      dateOfBirth: formattedDateOfBirth ?? prev.dateOfBirth,
+      dateOfBirth: dateOfBirth?.toISOString() ?? prev.dateOfBirth,
+      homeCountry: homeCountry ?? prev.homeCountry,
+      homeCity: homeCity ?? prev.homeCity,
+      homeTimezone: homeTimezone ?? prev.homeTimezone,
     }))
   }
 
@@ -126,6 +133,11 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
   const submitProfile = async (navigate?: NavigateFunction) => {
     if (basicInfo.dateOfBirth === undefined) {
       toast.error('Please provide your date of birth.')
+      return
+    }
+
+    if (basicInfo.homeCountry === undefined || basicInfo.homeCity === undefined) {
+      toast.error('Please provide your home country and city.')
       return
     }
 
@@ -217,6 +229,15 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
     if (basicInfo.name !== user?.name && basicInfo.name) {
       updates.name = basicInfo.name
+    }
+
+    if (basicInfo.homeCountry !== user?.timeInfo?.homeCountry && basicInfo.homeCountry) {
+      updates.timeInfo = {
+        ...user?.timeInfo,
+        homeCountry: basicInfo.homeCountry,
+        homeCity: basicInfo.homeCity ?? user?.timeInfo?.homeCity ?? '',
+        homeTimezone: basicInfo.homeTimezone ?? user?.timeInfo?.homeTimezone ?? '',
+      }
     }
 
     // Check differences between the current user and the updated user

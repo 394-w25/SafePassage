@@ -12,7 +12,7 @@ const getPageIndex = (path: string) => {
     case '/': {
       return 0
     }
-    case '/trip': {
+    case '/medication': {
       return 1
     }
     case '/user': {
@@ -37,11 +37,11 @@ const Footer = () => {
       to="/"
     />,
     <BottomNavigationAction
-      key="trip"
+      key="medication"
       label="Medication"
       icon={<EventIcon />}
       component={Link}
-      to="/trip"
+      to="/medication"
     />,
     <BottomNavigationAction
       key="user"

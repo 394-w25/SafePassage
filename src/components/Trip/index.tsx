@@ -1,9 +1,10 @@
 import { ConfirmationDialog } from '@/components/common'
-import { TripCard, TripDialog } from '@/components/Trip'
 import { useTrips } from '@/hooks'
 import { Box, Button, Fade, Stack, Typography } from '@mui/material'
 import { useToggle } from '@zl-asica/react'
 import { useCallback, useMemo, useState } from 'react'
+import TripCard from './TripCard'
+import TripDialog from './TripDialog'
 
 /**
   Sort by ongoing, future, and past trips
@@ -69,19 +70,6 @@ const TripPage = () => {
         </Typography>
       )}
 
-      {/* Trip List */}
-      <Stack spacing={2}>
-        {sortedTrips.map(trip => (
-          <TripCard
-            key={trip.id}
-            trip={trip}
-            loading={loading}
-            onEdit={() => handleOpenDialog(trip)}
-            onDuplicate={() => handleDuplicateButton(trip.id)}
-          />
-        ))}
-      </Stack>
-
       {/* Add Trip Button */}
       <Fade in timeout={300}>
         <Button
@@ -94,6 +82,19 @@ const TripPage = () => {
           + New Trip
         </Button>
       </Fade>
+
+      {/* Trip List */}
+      <Stack spacing={2} mt={5} mb={2}>
+        {sortedTrips.map(trip => (
+          <TripCard
+            key={trip.id}
+            trip={trip}
+            loading={loading}
+            onEdit={() => handleOpenDialog(trip)}
+            onDuplicate={() => handleDuplicateButton(trip.id)}
+          />
+        ))}
+      </Stack>
 
       {/* Trip Dialog (Add / Edit) */}
       <TripDialog

@@ -1,6 +1,6 @@
 import { ConfirmationDialog } from '@/components/common'
 import { CustomInputField, CustomSelectField } from '@/components/common/UI'
-import { countryCities } from '@/utils/tripUtils'
+import { allCountries, getCountryCities } from '@/utils/tripUtils'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 
 import { useToggle } from '@zl-asica/react'
@@ -25,7 +25,6 @@ const TripDialog = ({ open, onClose, trip, onSave, onDelete }: TripDialogProps) 
     endDate: '',
   })
 
-  const allCountries = Object.keys(countryCities)
   const [citiesOptions, setCitiesOptions] = useState<string[]>([])
 
   useEffect(() => {
@@ -38,11 +37,11 @@ const TripDialog = ({ open, onClose, trip, onSave, onDelete }: TripDialogProps) 
   }, [trip])
 
   useEffect(() => {
-    if (!formData.country || !(formData.country in countryCities)) {
+    if (!formData.country) {
       setCitiesOptions([])
       return
     }
-    setCitiesOptions(countryCities[formData.country].map(([city]) => city))
+    setCitiesOptions(getCountryCities(formData.country))
   }, [formData.country])
 
   const handleChange = (key: keyof Trip, value: string) => {

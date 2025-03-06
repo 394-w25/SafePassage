@@ -1,9 +1,8 @@
 import { Layout, LoadingCircle, ProtectedRoute } from '@/components/common'
 import Home from '@/pages/Home'
 import Me from '@/pages/Me'
+import Medication from '@/pages/Medication'
 import Onboarding from '@/pages/Onboarding'
-
-import Trip from '@/pages/Trip'
 import { useUserStore } from '@/stores'
 import Box from '@mui/material/Box'
 import { Route, Routes } from 'react-router-dom'
@@ -12,7 +11,7 @@ import UserMedicalRecord from './pages/UserMedicalRecord'
 const AppRoutes = () => {
   const routeConfig = [
     { path: '/onboarding', element: <Onboarding /> },
-    { path: '/trip', element: <Trip /> },
+    { path: '/medication', element: <Medication /> },
     { path: '/user', element: <Me /> },
   ]
 

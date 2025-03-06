@@ -63,3 +63,21 @@ export const countryCities: Record<string, [string, string][]> = {
   Malaysia: [['Kuala Lumpur', 'Asia/Kuala_Lumpur']],
   Thailand: [['Bangkok', 'Asia/Bangkok']],
 }
+
+export const allCountries = Object.keys(countryCities)
+
+export const getCountryCities = (country: string): string[] => {
+  return countryCities[country]?.map(([city]) => city) ?? []
+}
+
+export const getTimezone = (country?: string, city?: string): string => {
+  if (city === undefined || city === '' || country === undefined || country === '') {
+    if (country !== undefined) {
+      return countryCities[country]?.[0][1] ?? ''
+    }
+    else {
+      return ''
+    }
+  }
+  return countryCities[country]?.find(([c]) => c === city)?.[1] ?? ''
+}

@@ -1,5 +1,5 @@
 import { ConfirmationDialog } from '@/components/common'
-import { EditProfileForm, MainInfo } from '@/components/Me' // ✅ 新增 `EditProfileForm.tsx`
+import { EditProfileForm, MainInfo } from '@/components/Me'
 import { useUserStore } from '@/stores'
 import { Box, Button } from '@mui/material'
 import { useToggle } from '@zl-asica/react'
@@ -22,6 +22,7 @@ const Me = () => {
               <MainInfo
                 displayName={userData?.name}
                 email={userData?.email}
+                timeInfo={userData?.timeInfo}
                 profilePic={userData?.profilePic}
                 healthData={userData?.healthData}
               />

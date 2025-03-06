@@ -24,7 +24,7 @@ const UserMedicalRecord = () => {
     return null
   }
 
-  const { healthData, name, profilePic } = userData
+  const { healthData, name, profilePic, timeInfo } = userData
   const { dateOfBirth, healthInfos, contacts, medications } = healthData || {}
 
   return (
@@ -38,6 +38,7 @@ const UserMedicalRecord = () => {
       <MedicalProviderView
         name={name}
         profilePic={profilePic}
+        timeInfo={timeInfo}
         dateOfBirth={dateOfBirth}
         healthInfos={healthInfos}
       />
