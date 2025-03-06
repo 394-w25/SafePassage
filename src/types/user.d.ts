@@ -18,7 +18,6 @@ interface Medication {
   id: number
   name: string
   dosage?: string
-  frequency?: number
   time?: string
 }
 

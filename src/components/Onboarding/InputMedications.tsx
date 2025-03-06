@@ -1,9 +1,16 @@
 import { CustomInputField } from '@/components/common/UI'
 import { useHealthHistory } from '@/context'
+import { formatDate } from '@zl-asica/react'
 import EditableList from './EditableList'
 
 const InputMedications = () => {
   const { medications, addMedication, updateMedication, removeMedication } = useHealthHistory()
+
+  const handleTimeChanges = (id: number, time: string) => {
+    const [hours, minutes] = time.split(':').map(Number)
+    const formattedTime = new Date().setHours(hours, minutes, 0, 0)
+    updateMedication(id, 'time', new Date(formattedTime).toISOString())
+  }
 
   return (
     <EditableList
@@ -26,16 +33,10 @@ const InputMedications = () => {
             onChange={value => updateMedication(med.id, 'dosage', value)}
           />
           <CustomInputField
-            type="number"
-            label="Frequency (every x days)"
-            value={med.frequency}
-            onChange={value => updateMedication(med.id, 'frequency', value)}
-          />
-          <CustomInputField
             type="time"
             label="Time (HH:MM)"
-            value={med.time}
-            onChange={value => updateMedication(med.id, 'time', value)}
+            value={formatDate(med.time !== undefined ? new Date(med.time) : new Date(), 'HH:mm')}
+            onChange={value => handleTimeChanges(med.id, value)}
             inputLabel={{ shrink: true }}
           />
         </>
