@@ -40,7 +40,7 @@ const TripCard = ({ trip, loading, onEdit, onDuplicate }: TripCardProps) => {
       <Card sx={{ ...getTripStyles(tripType), p: 1, borderRadius: 2 }}>
         <CardContent>
           <Typography variant="h6" fontWeight="bold">
-            {trip.city !== undefined ? `${trip.city}, ` : ''}
+            {trip.city !== undefined && trip.city.trim() !== '' ? `${trip.city}, ` : ''}
             {trip.country}
           </Typography>
           <Typography variant="body2" color="textSecondary">

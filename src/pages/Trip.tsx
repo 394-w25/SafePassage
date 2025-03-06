@@ -5,20 +5,32 @@ import { Box, Button, Fade, Stack, Typography } from '@mui/material'
 import { useToggle } from '@zl-asica/react'
 import { useCallback, useMemo, useState } from 'react'
 
+/**
+  Sort by ongoing, future, and past trips
+ */
 const useSortedTrips = (trips: Trip[]) => {
   const now = new Date().toISOString().split('T')[0]
 
   return useMemo(() => {
-    return [...trips].sort((a, _) => {
-      // Ongoing first
-      if (a.startDate <= now && a.endDate >= now) {
+    return [...trips].sort((a, b) => {
+      const isOngoing = (trip: Trip) => trip.startDate <= now && trip.endDate >= now
+      const isFuture = (trip: Trip) => trip.startDate > now
+
+      if (isOngoing(a) && !isOngoing(b)) {
         return -1
       }
-      // Future next
-      if (a.startDate > now) {
-        return 0
+      if (!isOngoing(a) && isOngoing(b)) {
+        return 1
       }
-      return 1 // Past last
+
+      if (isFuture(a) && !isFuture(b)) {
+        return -1
+      }
+      if (!isFuture(a) && isFuture(b)) {
+        return 1
+      }
+
+      return a.startDate.localeCompare(b.startDate)
     })
   }, [trips, now])
 }
