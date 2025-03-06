@@ -6,6 +6,18 @@ interface MedicationInfosProps {
 }
 
 const MedicationInfos = ({ medications }: MedicationInfosProps) => {
+  // Format time to display only the HH:mm AM/PM
+  const formatTime = (time: string | undefined) => {
+    if (time === undefined) {
+      return 'N/A'
+    }
+    return new Date(time).toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    })
+  }
+
   return (
     <Card elevation={2} sx={{ borderRadius: 2, mt: 3 }}>
       <CardContent>
@@ -24,7 +36,7 @@ const MedicationInfos = ({ medications }: MedicationInfosProps) => {
                         secondary={medication.dosage}
                       />
                       <ListItemText
-                        primary={medication.time}
+                        primary={formatTime(medication.time)}
                         sx={{ textAlign: 'right' }}
                       />
                     </ListItem>
