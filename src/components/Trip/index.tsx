@@ -1,6 +1,6 @@
 import { ConfirmationDialog } from '@/components/common'
 import { useTrips } from '@/hooks'
-import { Box, Button, Fade, Stack, Typography } from '@mui/material'
+import { Button, Fade, Stack, Typography } from '@mui/material'
 import { useToggle } from '@zl-asica/react'
 import { useCallback, useMemo, useState } from 'react'
 import TripCard from './TripCard'
@@ -56,7 +56,7 @@ const TripPage = () => {
   }, [toggleDuplicateConfirmationDialog])
 
   return (
-    <Box p={2}>
+    <>
       <Typography variant="h5" fontWeight="bold" textAlign="center" mb={2}>
         Trip Records
       </Typography>
@@ -130,7 +130,7 @@ const TripPage = () => {
         title="Duplicate Trip"
         description="Are you sure you want to duplicate this trip?"
       />
-    </Box>
+    </>
   )
 }
 

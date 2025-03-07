@@ -1,4 +1,4 @@
-import { useDateSlider } from '@/hooks/useDateSlider'
+import { useDateSlider } from '@/context'
 import { Box, Stack, Typography, useTheme } from '@mui/material'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'

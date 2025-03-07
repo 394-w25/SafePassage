@@ -14,6 +14,11 @@ interface Contact {
   phone: string
 }
 
+interface MedicationSchedule extends Medication {
+  duringTrip: boolean
+  adjusted: boolean
+}
+
 interface Medication {
   id: number
   name: string

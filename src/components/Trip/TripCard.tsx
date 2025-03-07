@@ -1,3 +1,4 @@
+import { styles } from '@/utils/tripUtils'
 import { ContentCopy, Edit } from '@mui/icons-material'
 import {
   Card,
@@ -16,15 +17,6 @@ interface TripCardProps {
   onDuplicate: () => void
 }
 
-const getTripStyles = (tripType: 'ongoing' | 'future' | 'past') => {
-  const styles = {
-    ongoing: { borderLeft: '6px solid #f57c00', backgroundColor: '#fff7e6' },
-    future: { borderLeft: '6px solid #1976d2', backgroundColor: '#e3f2fd' },
-    past: { borderLeft: '6px solid #757575', backgroundColor: '#f5f5f5' },
-  }
-  return styles[tripType]
-}
-
 const TripCard = ({ trip, loading, onEdit, onDuplicate }: TripCardProps) => {
   const now = formatDate(new Date())
 
@@ -37,7 +29,7 @@ const TripCard = ({ trip, loading, onEdit, onDuplicate }: TripCardProps) => {
 
   return (
     <Fade in timeout={300}>
-      <Card sx={{ ...getTripStyles(tripType), p: 1, borderRadius: 2 }}>
+      <Card sx={{ ...styles[tripType], p: 1, borderRadius: 2 }}>
         <CardContent>
           <Typography variant="h6" fontWeight="bold">
             {trip.city !== undefined && trip.city.trim() !== '' ? `${trip.city}, ` : ''}
