@@ -36,7 +36,8 @@ const Medication = () => {
         if (b.time === undefined) {
           return -1
         }
-        return a.time.localeCompare(b.time)
+        // a & b are all in HH:mm AM/PM format
+        return dayjs(a.time, 'hh:mm A').isBefore(dayjs(b.time, 'hh:mm A')) ? 1 : -1
       })
   }, [userData?.healthData?.medications, userData?.trips, userData?.timeInfo, selectedDate])
 
