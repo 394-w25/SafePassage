@@ -1,24 +1,37 @@
 import { ConfirmationDialog } from '@/components/common'
-import { TripCard, TripDialog } from '@/components/Trip'
 import { useTrips } from '@/hooks'
-import { Box, Button, Fade, Stack, Typography } from '@mui/material'
+import { Button, Fade, Stack, Typography } from '@mui/material'
 import { useToggle } from '@zl-asica/react'
 import { useCallback, useMemo, useState } from 'react'
+import TripCard from './TripCard'
+import TripDialog from './TripDialog'
 
+/**
+  Sort by ongoing, future, and past trips
+ */
 const useSortedTrips = (trips: Trip[]) => {
   const now = new Date().toISOString().split('T')[0]
 
   return useMemo(() => {
-    return [...trips].sort((a, _) => {
-      // Ongoing first
-      if (a.startDate <= now && a.endDate >= now) {
+    return [...trips].sort((a, b) => {
+      const isOngoing = (trip: Trip) => trip.startDate <= now && trip.endDate >= now
+      const isFuture = (trip: Trip) => trip.startDate > now
+
+      if (isOngoing(a) && !isOngoing(b)) {
         return -1
       }
-      // Future next
-      if (a.startDate > now) {
-        return 0
+      if (!isOngoing(a) && isOngoing(b)) {
+        return 1
       }
-      return 1 // Past last
+
+      if (isFuture(a) && !isFuture(b)) {
+        return -1
+      }
+      if (!isFuture(a) && isFuture(b)) {
+        return 1
+      }
+
+      return a.startDate.localeCompare(b.startDate)
     })
   }, [trips, now])
 }
@@ -43,7 +56,7 @@ const TripPage = () => {
   }, [toggleDuplicateConfirmationDialog])
 
   return (
-    <Box p={2}>
+    <>
       <Typography variant="h5" fontWeight="bold" textAlign="center" mb={2}>
         Trip Records
       </Typography>
@@ -57,19 +70,6 @@ const TripPage = () => {
         </Typography>
       )}
 
-      {/* Trip List */}
-      <Stack spacing={2}>
-        {sortedTrips.map(trip => (
-          <TripCard
-            key={trip.id}
-            trip={trip}
-            loading={loading}
-            onEdit={() => handleOpenDialog(trip)}
-            onDuplicate={() => handleDuplicateButton(trip.id)}
-          />
-        ))}
-      </Stack>
-
       {/* Add Trip Button */}
       <Fade in timeout={300}>
         <Button
@@ -82,6 +82,19 @@ const TripPage = () => {
           + New Trip
         </Button>
       </Fade>
+
+      {/* Trip List */}
+      <Stack spacing={2} mt={5} mb={2}>
+        {sortedTrips.map(trip => (
+          <TripCard
+            key={trip.id}
+            trip={trip}
+            loading={loading}
+            onEdit={() => handleOpenDialog(trip)}
+            onDuplicate={() => handleDuplicateButton(trip.id)}
+          />
+        ))}
+      </Stack>
 
       {/* Trip Dialog (Add / Edit) */}
       <TripDialog
@@ -117,7 +130,7 @@ const TripPage = () => {
         title="Duplicate Trip"
         description="Are you sure you want to duplicate this trip?"
       />
-    </Box>
+    </>
   )
 }
 

@@ -14,6 +14,11 @@ interface Contact {
   phone: string
 }
 
+interface MedicationSchedule extends Medication {
+  duringTrip: boolean
+  adjusted: boolean
+}
+
 interface Medication {
   id: number
   name: string
@@ -36,6 +41,12 @@ interface HealthData {
   medications?: Medication[]
 }
 
+interface TimeInfo {
+  homeCountry: string
+  homeCity: string
+  homeTimezone: string
+}
+
 interface UserProfile {
   uid: string
   name: string
@@ -45,5 +56,6 @@ interface UserProfile {
   role: UserType
   onboarded: boolean
   healthData?: HealthData
+  timeInfo?: TimeInfo
   trips?: Trip[]
 }

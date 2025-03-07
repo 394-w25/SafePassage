@@ -4,11 +4,12 @@ import { Avatar, Box, Card, CardContent, Divider, Grid2 as Grid, Typography } fr
 interface MainInfoProps {
   displayName: string | undefined
   email: string | undefined
+  timeInfo: TimeInfo | undefined
   profilePic: string | undefined
   healthData: HealthData | undefined
 }
 
-const MainInfo = ({ displayName, email, profilePic, healthData }: MainInfoProps) => {
+const MainInfo = ({ displayName, email, timeInfo, profilePic, healthData }: MainInfoProps) => {
   const age = calculateAge(healthData?.dateOfBirth)
 
   const medicationCount = healthData?.medications?.length ?? 0
@@ -40,10 +41,15 @@ const MainInfo = ({ displayName, email, profilePic, healthData }: MainInfoProps)
       <Typography variant="body1" color="text.secondary">
         {email ?? 'N/A'}
       </Typography>
-      <Typography variant="body1" color="text.secondary" mb={2}>
+      <Typography variant="body1" color="text.secondary">
         {age}
         {' '}
         years old
+      </Typography>
+      <Typography variant="body1" color="text.secondary" mb={2}>
+        {timeInfo?.homeCity ?? 'N/A'}
+        {', '}
+        {timeInfo?.homeCountry ?? 'N/A'}
       </Typography>
 
       {/* Health Summary */}

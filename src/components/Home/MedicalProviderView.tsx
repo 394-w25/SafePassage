@@ -4,6 +4,7 @@ import { Avatar, Box, Card, CardContent, List, ListItem, ListItemText, Typograph
 interface MedicalProviderViewProps {
   name: string
   profilePic: string
+  timeInfo: TimeInfo | undefined
   dateOfBirth: string | undefined
   healthInfos: HealthInfos | undefined
 }
@@ -11,6 +12,7 @@ interface MedicalProviderViewProps {
 const MedicalProviderView = ({
   name,
   profilePic,
+  timeInfo,
   dateOfBirth,
   healthInfos,
 }: MedicalProviderViewProps) => {
@@ -47,6 +49,15 @@ const MedicalProviderView = ({
               {' '}
               {calculateAge(dateOfBirth)}
             </Typography>
+            {timeInfo !== undefined && (
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                From:
+                {' '}
+                {timeInfo.homeCity}
+                {', '}
+                {timeInfo.homeCountry}
+              </Typography>
+            )}
           </Box>
         </Box>
 

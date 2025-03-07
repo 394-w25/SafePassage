@@ -1,4 +1,5 @@
 import { Card, CardContent, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
+import dayjs from 'dayjs'
 import { Fragment } from 'react'
 
 interface MedicationInfosProps {
@@ -6,6 +7,15 @@ interface MedicationInfosProps {
 }
 
 const MedicationInfos = ({ medications }: MedicationInfosProps) => {
+  // time is in HH:mm format, convert to HH:mm AM/PM
+  const formatTime = (time: string | undefined) => {
+    if (time === undefined) {
+      return 'N/A'
+    }
+    const [hours, minutes] = time.split(':')
+    return dayjs().hour(Number(hours)).minute(Number(minutes)).format('hh:mm A')
+  }
+
   return (
     <Card elevation={2} sx={{ borderRadius: 2, mt: 3 }}>
       <CardContent>
@@ -24,7 +34,7 @@ const MedicationInfos = ({ medications }: MedicationInfosProps) => {
                         secondary={medication.dosage}
                       />
                       <ListItemText
-                        primary={medication.time}
+                        primary={formatTime(medication.time)}
                         sx={{ textAlign: 'right' }}
                       />
                     </ListItem>

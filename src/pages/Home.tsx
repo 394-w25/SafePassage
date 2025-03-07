@@ -10,7 +10,7 @@ const Home = () => {
     return null
   }
 
-  const { uid, name, profilePic, healthData } = userData
+  const { uid, name, profilePic, healthData, timeInfo } = userData
   const { dateOfBirth, healthInfos, contacts, medications } = healthData || {}
 
   return (
@@ -21,6 +21,7 @@ const Home = () => {
 
       <MedicalProviderView
         name={name}
+        timeInfo={timeInfo}
         profilePic={profilePic}
         dateOfBirth={dateOfBirth}
         healthInfos={healthInfos}

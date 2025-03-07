@@ -24,20 +24,16 @@ const UserMedicalRecord = () => {
     return null
   }
 
-  const { healthData, name, profilePic } = userData
+  const { healthData, name, profilePic, timeInfo } = userData
   const { dateOfBirth, healthInfos, contacts, medications } = healthData || {}
 
   return (
     <Box sx={{ px: 2, py: 3 }}>
-      <Typography variant="h6" fontWeight="bold" sx={{ color: 'primary.main', mb: 2 }}>
-        Medical Record for
-        {' '}
-        {name}
-      </Typography>
 
       <MedicalProviderView
         name={name}
         profilePic={profilePic}
+        timeInfo={timeInfo}
         dateOfBirth={dateOfBirth}
         healthInfos={healthInfos}
       />
@@ -48,7 +44,7 @@ const UserMedicalRecord = () => {
 
       <LanguageToggle />
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 2 }}>
         <Button
           variant="contained"
           size="large"

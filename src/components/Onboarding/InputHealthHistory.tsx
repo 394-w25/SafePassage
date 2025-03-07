@@ -1,11 +1,27 @@
-import { CustomInputField } from '@/components/common/UI'
+import { CustomInputField, CustomSelectField } from '@/components/common/UI'
 import { useHealthHistory } from '@/context'
+import { allCountries, getCountryCities, getTimezone } from '@/utils/tripUtils'
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material'
+import { useMemo } from 'react'
 import EditableSection from './EditableSection'
 
 const InputHealthHistory = () => {
   const { basicInfo, updateBasicInfo, healthInfos, updateHealthInfos } = useHealthHistory()
 
+  const availableCities = useMemo(() => {
+    return basicInfo.homeCountry !== undefined ? getCountryCities(basicInfo.homeCountry) : []
+  }, [basicInfo.homeCountry])
+
+  const handleCountryChange = (country: string) => {
+    const firstCity = getCountryCities(country)
+    const timezone = getTimezone(country, firstCity?.[0])
+    updateBasicInfo(undefined, undefined, country, firstCity?.[0], timezone)
+  }
+
+  const handleCityChange = (city: string) => {
+    const timezone = getTimezone(basicInfo.homeCountry, city)
+    updateBasicInfo(undefined, undefined, basicInfo.homeCountry, city, timezone)
+  }
   return (
     <Box sx={{ mt: 3 }}>
       <Card>
@@ -31,6 +47,7 @@ const InputHealthHistory = () => {
             type="text"
             value={basicInfo.name}
             onChange={value => updateBasicInfo(value)}
+            required
           />
           <CustomInputField
             label="Date of Birth"
@@ -38,6 +55,22 @@ const InputHealthHistory = () => {
             value={basicInfo.dateOfBirth}
             onChange={value => updateBasicInfo(undefined, new Date(value))}
             inputLabel={{ shrink: true }}
+            required
+          />
+          <CustomSelectField
+            label="Home Country"
+            value={basicInfo.homeCountry}
+            onChange={handleCountryChange}
+            options={allCountries}
+            required
+          />
+          <CustomSelectField
+            label="Home City"
+            value={basicInfo.homeCity}
+            onChange={handleCityChange}
+            disabled={availableCities.length === 0}
+            options={availableCities}
+            required
           />
 
         </CardContent>
