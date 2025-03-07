@@ -1,4 +1,5 @@
 import { Card, CardContent, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
+import dayjs from 'dayjs'
 import { Fragment } from 'react'
 
 interface MedicationInfosProps {
@@ -6,16 +7,13 @@ interface MedicationInfosProps {
 }
 
 const MedicationInfos = ({ medications }: MedicationInfosProps) => {
-  // Format time to display only the HH:mm AM/PM
+  // time is in HH:mm format, convert to HH:mm AM/PM
   const formatTime = (time: string | undefined) => {
     if (time === undefined) {
       return 'N/A'
     }
-    return new Date(time).toLocaleString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    })
+    const [hours, minutes] = time.split(':')
+    return dayjs().hour(Number(hours)).minute(Number(minutes)).format('hh:mm A')
   }
 
   return (
