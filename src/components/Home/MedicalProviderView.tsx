@@ -1,4 +1,6 @@
+import { useLanguageStore } from '@/stores'
 import { calculateAge, formatTitleCase } from '@/utils/onboardingUtils'
+import { translations } from '@/utils/translations'
 import { Avatar, Box, Card, CardContent, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 interface MedicalProviderViewProps {
@@ -16,11 +18,12 @@ const MedicalProviderView = ({
   dateOfBirth,
   healthInfos,
 }: MedicalProviderViewProps) => {
+  const language = useLanguageStore(state => state.language)
   return (
     <Card elevation={2} sx={{ borderRadius: 2 }}>
       <CardContent>
         <Typography variant="h6" fontWeight="bold" sx={{ color: 'primary.main', mb: 1.2 }}>
-          Medical Provider View
+          {translations[language].MedicalProvider.title}
         </Typography>
 
         {/* User Profile */}
