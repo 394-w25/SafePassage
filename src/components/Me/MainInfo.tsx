@@ -60,54 +60,66 @@ const MainInfo = ({ displayName, email, timeInfo, profilePic, healthData }: Main
           </Typography>
           <Divider sx={{ mb: 2 }} />
           <Grid container spacing={2} justifyContent="center">
-            <Grid size={{ xs: 6 }}>
-              <Typography variant="body2" color="text.secondary">
-                Allergies
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {allergiesCount}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <Typography variant="body2" color="text.secondary">
-                Surgeries
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {pastSurgeriesCount}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <Typography variant="body2" color="text.secondary">
-                Conditions
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {medicalConditionsCount}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <Typography variant="body2" color="text.secondary">
-                Devices
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {medicalDevicesCount}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <Typography variant="body2" color="text.secondary">
-                Medications
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {medicationCount}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <Typography variant="body2" color="text.secondary">
-                Emergency Contacts
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {emergencyContactsCount}
-              </Typography>
-            </Grid>
+            {allergiesCount !== 0 && (
+              <Grid size={{ xs: 6 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Allergies
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {allergiesCount}
+                </Typography>
+              </Grid>
+            )}
+            {pastSurgeriesCount !== 0 && (
+              <Grid size={{ xs: 6 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Surgeries
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {pastSurgeriesCount}
+                </Typography>
+              </Grid>
+            )}
+            {medicalConditionsCount !== 0 && (
+              <Grid size={{ xs: 6 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Conditions
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {medicalConditionsCount}
+                </Typography>
+              </Grid>
+            )}
+            {medicalDevicesCount !== 0 && (
+              <Grid size={{ xs: 6 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Devices
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {medicalDevicesCount}
+                </Typography>
+              </Grid>
+            )}
+            {medicationCount !== 0 && (
+              <Grid size={{ xs: 6 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Medications
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {medicationCount}
+                </Typography>
+              </Grid>
+            )}
+            {emergencyContactsCount !== 0 && (
+              <Grid size={{ xs: 6 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Emergency Contacts
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {emergencyContactsCount}
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </CardContent>
       </Card>
