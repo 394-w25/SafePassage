@@ -1,3 +1,5 @@
+import { useLanguageStore } from '@/stores'
+import { translations } from '@/utils/translations'
 import { Card, CardContent, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
 import React from 'react'
 
@@ -6,11 +8,12 @@ interface EmergencyContactsProps {
 }
 
 const EmergencyContacts = ({ contacts }: EmergencyContactsProps) => {
+  const language = useLanguageStore(state => state.language)
   return (
     <Card elevation={2} sx={{ borderRadius: 2, mt: 3 }}>
       <CardContent>
         <Typography variant="h6" fontWeight="bold" sx={{ color: 'primary.main', mb: 1.2 }}>
-          Emergency Contacts
+          {translations[language].emergencyContacts}
         </Typography>
 
         {Array.isArray(contacts) && contacts.length > 0

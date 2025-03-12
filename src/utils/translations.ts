@@ -1,10 +1,63 @@
-export const translations = {
-  changeLanguage: {
-    EN: 'Change Language',
-    CN: '更改语言',
+export const languageMap = {
+  EN: 'English',
+  CN: '中文',
+} as const
+
+export const translations: Translation = {
+  EN: {
+    changeLanguage: 'Change Language',
+    changeLanguageSuccess: 'Language changed',
+    MedicalProvider: {
+      title: 'Medical Provider View',
+      nameLabel: 'Name:',
+      ageLabel: 'Age:',
+    },
+    HealthHistory: 'Health History',
+    Medications: 'Medications',
+    EmergencyContacts: 'Emergency Contacts',
+    healthInfos: {
+      allergies: 'Allergies',
+      medicalConditions: 'Medical Conditions',
+      pastSurgeries: 'Past Surgeries',
+      medicalDevices: 'Medical Devices',
+    },
+    medicationInfos: 'Medication Infos',
+    emergencyContacts: 'Emergency Contacts',
+    EMERGENCY_BUTTON: 'EMERGENCY',
+    emergencyAlert: 'Emergency Alert',
+    emergencyAlertContent: 'The system will send an emergency alert to all the emergency contacts in',
+    seconds: 's',
+    cancelButton: 'Cancel',
+    sendNowButton: 'Send Now',
+    emergencySent: 'EMERGENCY ALERT SENT',
+    from: 'From:',
   },
-  changeLanguageSuccess: {
-    EN: 'Language changed',
-    CN: '语言已更改',
+  CN: {
+    changeLanguage: '更改语言',
+    changeLanguageSuccess: '语言已更改',
+    MedicalProvider: {
+      title: '医疗提供者视图',
+      nameLabel: '姓名:',
+      ageLabel: '年龄:',
+    },
+    HealthHistory: '健康史',
+    Medications: '药物',
+    EmergencyContacts: '紧急联系人',
+    healthInfos: {
+      allergies: '过敏源',
+      medicalConditions: '医疗状况',
+      pastSurgeries: '手术史',
+      medicalDevices: '医疗设备',
+    },
+    medicationInfos: '药物信息',
+    emergencyContacts: '紧急联系人',
+    EMERGENCY_BUTTON: '紧急情况',
+    emergencyAlert: '紧急信息',
+    emergencyAlertContent: '将在倒计时后向所有紧急联系人发送紧急信息',
+    seconds: '秒',
+    cancelButton: '取消',
+    sendNowButton: '立即发送',
+    emergencySent: '紧急信息已发送',
+    from: '来自:',
   },
 }

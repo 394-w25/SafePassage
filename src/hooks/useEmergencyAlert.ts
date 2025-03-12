@@ -1,11 +1,14 @@
+import { useLanguageStore } from '@/stores'
 import { getUIDProfile } from '@/utils/firebase'
-import { useEffect, useRef, useState } from 'react'
+import { translations } from '@/utils/translations'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export const useEmergencyAlert = (countDown: number = 10) => {
   const { uid } = useParams<{ uid: string }>()
   const navigate = useNavigate()
+  const language = useLanguageStore(state => state.language)
 
   const [userData, setUserData] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
@@ -15,19 +18,12 @@ export const useEmergencyAlert = (countDown: number = 10) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const hasTriggeredRef = useRef<boolean>(false)
 
-  const handleEmergency = () => {
+  const handleEmergency = useCallback(() => {
     if (!hasTriggeredRef.current) {
       hasTriggeredRef.current = true
-      // eslint-disable-next-line no-console
-      console.info('Emergency alert sent!')
-      toast.error(`⚠️ EMERGENCY ALERT: sent!`, { duration: 8000 })
+      toast.error(`⚠️ ${translations[language].emergencySent}!`, { duration: 8000 })
     }
-    else {
-      // eslint-disable-next-line no-console
-      console.info('Emergency alert already sent!')
-      toast.error(`⚠️ EMERGENCY ALERT: already sent!`, { duration: 8000 })
-    }
-  }
+  }, [language])
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -80,7 +76,7 @@ export const useEmergencyAlert = (countDown: number = 10) => {
         }
       }
     }
-  }, [userData, countDown])
+  }, [userData, countDown, handleEmergency])
 
   const handleSendNow = () => {
     setShowPopup(false)

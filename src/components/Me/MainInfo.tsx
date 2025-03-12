@@ -11,7 +11,6 @@ interface MainInfoProps {
 
 const MainInfo = ({ displayName, email, timeInfo, profilePic, healthData }: MainInfoProps) => {
   const age = calculateAge(healthData?.dateOfBirth)
-
   const medicationCount = healthData?.medications?.length ?? 0
   const allergiesCount = healthData?.healthInfos?.allergies?.length ?? 0
   const pastSurgeriesCount = healthData?.healthInfos?.pastSurgeries?.length ?? 0

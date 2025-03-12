@@ -1,24 +1,27 @@
 import type { SelectChangeEvent } from '@mui/material'
-import { translations } from '@/utils/translations'
+import { useLanguageStore } from '@/stores'
+import { languageMap } from '@/utils/translations'
 import LanguageIcon from '@mui/icons-material/Language'
 import { MenuItem, Select, Stack } from '@mui/material'
-import { useState } from 'react'
-import { toast } from 'sonner'
 
 const LanguageToggle = () => {
-  const [language, setLanguage] = useState<'English' | '中文'>('English')
+  const { language, setLanguage } = useLanguageStore()
 
-  const handleChangeLanguage = (event: SelectChangeEvent<'English' | '中文'>) => {
-    const newLanguage = event.target.value
-    setLanguage(newLanguage as 'English' | '中文')
-    toast.success(translations.changeLanguageSuccess[newLanguage === 'English' ? 'EN' : 'CN'])
+  const handleChangeLanguage = (event_: SelectChangeEvent<string>) => {
+    const newLanguage = Object.entries(languageMap).find(
+      ([, value]) => value === event_.target.value,
+    )?.[0]
+
+    if (newLanguage !== undefined) {
+      setLanguage(newLanguage as keyof typeof languageMap)
+    }
   }
 
   return (
     <Stack direction="row" justifyContent="flex-end" alignItems="center" sx={{ mt: 2 }}>
       <LanguageIcon sx={{ mr: 1, color: 'primary.main' }} />
       <Select
-        value={language}
+        value={languageMap[language]}
         onChange={handleChangeLanguage}
         size="small"
         sx={{
@@ -30,8 +33,11 @@ const LanguageToggle = () => {
           },
         }}
       >
-        <MenuItem value="English">English</MenuItem>
-        <MenuItem value="中文">中文</MenuItem>
+        {Object.values(languageMap).map(language => (
+          <MenuItem key={language} value={language}>
+            {language}
+          </MenuItem>
+        ))}
       </Select>
     </Stack>
   )
