@@ -53,7 +53,7 @@ const InputHealthHistory = () => {
             label="Date of Birth"
             type="date"
             value={basicInfo.dateOfBirth}
-            onChange={value => updateBasicInfo(undefined, new Date(value))}
+            onChange={value => updateBasicInfo(undefined, value)}
             inputLabel={{ shrink: true }}
             required
           />
