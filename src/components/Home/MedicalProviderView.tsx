@@ -69,7 +69,7 @@ const MedicalProviderView = ({
           (items as string[])?.length > 0 && (
             <Box key={key} sx={{ mb: 2 }}>
               <Typography fontWeight="bold" sx={{ mb: 1, color: 'primary.main' }}>
-                {formatTitleCase(translations[language].healthInfos[key])}
+                {formatTitleCase(translations[language].healthInfos[key as keyof HealthInfos])}
               </Typography>
               <List dense sx={{ bgcolor: '#FAF9F6', borderRadius: 1, p: 1 }}>
                 {(items as string[]).map(item => (
