@@ -2,27 +2,42 @@
 
 > COMP_SCI 394 - Winter 2025 - Northwestern University
 
+[![GitHub License][license-badge]][license-link]
+[![Node.js][node-badge]][node-link]
+[![pnpm Version][pnpm-badge]][pnpm-link]|
+[![React][react-badge]][react-link]
+[![Vite][vite-badge]][vite-link]
+[![Vitest][vitest-badge]][vitest-link]
+[![Firebase][firebase-badge]][firebase-link]
+[![Eslint][eslint-badge]][eslint-link]
+
 ## Table of Contents
 
 - [SafePassage - Yellow Team](#safepassage---yellow-team)
   - [Table of Contents](#table-of-contents)
-  - [1. File Structure and Logic](#1-file-structure-and-logic)
-  - [2. Keeping Your Work Up-to-Date with `origin/main`](#2-keeping-your-work-up-to-date-with-originmain)
-    - [Step 1: Create a New Feature Branch](#step-1-create-a-new-feature-branch)
-    - [Step 2: Update Your Local `main` with `origin/main`](#step-2-update-your-local-main-with-originmain)
-    - [Step 3: Rebase Your Feature Branch onto the Updated `main`](#step-3-rebase-your-feature-branch-onto-the-updated-main)
-  - [3. TypeScript](#3-typescript)
-    - [1. Global Types in `types.d.ts`](#1-global-types-in-typesdts)
-    - [2. Local Types Definition](#2-local-types-definition)
-    - [3. Interfaces and props](#3-interfaces-and-props)
-    - [4. `import type` Instead of `import`](#4-import-type-instead-of-import)
-  - [4. Zustand](#4-zustand)
-    - [1. What is Zustand?](#1-what-is-zustand)
-    - [2. How to Use Zustand](#2-how-to-use-zustand)
-      - [Accessing Global State](#accessing-global-state)
-      - [Updating State](#updating-state)
+  - [Project Description](#project-description)
+  - [File Structure and Logic](#file-structure-and-logic)
+  - [Getting Started](#getting-started)
+    - [Preparation](#preparation)
+      - [1. Node.js Environment Setup](#1-nodejs-environment-setup)
+      - [2. Firebase Configuration](#2-firebase-configuration)
+      - [3. `.env` Configuration](#3-env-configuration)
+    - [Installation](#installation)
+      - [1. Dependencies Installation (with pnpm)](#1-dependencies-installation-with-pnpm)
+      - [2. Firebase connection](#2-firebase-connection)
+      - [3. Backend](#3-backend)
+    - [Development](#development)
+    - [Production (Preview)](#production-preview)
+    - [Deploy to Firebase Hosting (Only do this after the production build)](#deploy-to-firebase-hosting-only-do-this-after-the-production-build)
+    - [Linting](#linting)
+  - [Dev Team Members](#dev-team-members)
+  - [License](#license)
 
-## 1. File Structure and Logic
+## Project Description
+
+SafePassage is a web application that allows users with medical conditions who want to traveling abroad to generate a QR code that contains their medical information. This QR code can be scanned by medical professionals in the destination country to access the user's medical information in translated language. The application also auto-send SMS messages to the user's emergency contacts when the emergency medical QR code is scanned.
+
+## File Structure and Logic
 
 This project uses a component-based structure with a focus on clear separation of concerns. Key files and folders:
 
@@ -33,8 +48,14 @@ This project uses a component-based structure with a focus on clear separation o
 ├── vite.config.ts             # Vite configuration file
 ├── tsconfig.json              # Typescript config file
 ├── firebase.json              # Firebase configuration for hosting
+├── eslint.config.mjs          # Eslint configuration
 ├── package.json               # Dependencies
+├── pnpm-lock.yaml             # pnpm lock file
 └── src                        # Source code
+    ├── App.tsx                # Main application component
+    ├── index.tsx              # Entry point of the application
+    ├── routes.tsx             # Application routes
+    ├── global.css             # Global styles
     ├── components             # Shared components and features
     │   ├── common             # Common components used across the app
     │   ├── Home               # Home page components
@@ -44,287 +65,171 @@ This project uses a component-based structure with a focus on clear separation o
     ├── hooks                  # Custom hooks for specialized logic
     ├── pages                  # Application pages
     ├── utils                  # Utility functions and Firebase configurations
+    │   ├── firebase           # Firebase configurations
+    │   └── ...
+    ├── contexts               # React context providers
     └── types                  # Global types define here (such as schemas).
 ```
 
 The main components and utilities are organized under `src/components` and `src/utils`.
 
-## 2. Keeping Your Work Up-to-Date with `origin/main`
+## Getting Started
 
-### Step 1: Create a New Feature Branch
+### Preparation
 
-- **Why**: Avoid developing directly on `main`. Keeping `main` in sync with `origin/main` makes it easier to update and manage changes.
-- **How**: Create and switch to a new branch for your feature, and remember to push it to `origin`:
+#### 1. Node.js Environment Setup
 
-  ```bash
-  git switch -c feat/new-feature-name
-  git push -u origin feat/new-feature-name
-  ```
+Make sure you have Node.js (>= 20.0.0) installed on your machine. Recommend using LTS version.
 
-### Step 2: Update Your Local `main` with `origin/main`
+Check whether you have `pnpm` installed by running:
 
-1. **Switch Back to `main`**: Ensure you're on `main` before updating:
-
-   ```bash
-   git switch main
-   ```
-
-2. **Stash Your Work**(if needed): If you have uncommitted changes, stash them to avoid conflicts while pulling:
-
-   ```bash
-   git stash
-   ```
-
-3. **Pull Latest Changes**: Bring in the latest updates from `origin/main`:
-
-   ```bash
-   git pull origin main
-   ```
-
-### Step 3: Rebase Your Feature Branch onto the Updated `main`
-
-1. **Switch Back to Your Feature Branch**:
-
-   ```bash
-   git switch feat/new-feature-name
-   ```
-
-2. **Rebase**: Apply your feature branch changes on top of the latest `main`:
-
-   ```bash
-   git rebase main
-   ```
-
-3. **Apply Stash**(if you stashed changes): Reapply your saved changes once main is updated:
-
-   ```bash
-   git stash pop
-   ```
-
-4. **Resolve Conflicts** (if any): If conflicts occur, Git will prompt you to resolve them. After resolving, use:
-
-   ```bash
-   git add <conflicted-files>
-   git rebase --continue
-   ```
-
-5. **Push Changes**:
-
-   - **If you have NOT previously pushed code to the remote**:
-
-     ```bash
-     git push
-     ```
-
-   - **If you HAVE previously pushed code** (with conflicting changes), you may need to force-push to align with the rebased history. **(Do NOT use this on `main`)**
-
-     ```bash
-     git push --force-with-lease
-     ```
-
-By following these steps, you ensure that `main` remains in sync with `origin/main`, while your feature branch incorporates the latest updates without directly modifying `main`. This keeps your work organized and minimizes conflict risks.
-
-## 3. TypeScript
-
-In this project, TypeScript types and interfaces are used to ensure clarity and catch errors early in the development process. Defining types helps TypeScript provide hints and checks, reducing potential bugs by catching type mismatches before runtime.
-
-### 1. Global Types in `types.d.ts`
-
-For types shared across multiple components or features, define them globally in `types.d.ts`. This allows all components to access these types without needing to import them explicitly, keeping the code DRY.
-
-**Example**:
-
-```typescript
-// types.d.ts
-
-interface UserContext = {
-  user: User | null;
-  loading: boolean;
-};
-
-type User {
-  uid: string;
-  username: string;
-  email: string;
-  avatar: string;
-}
+```bash
+pnpm --version
 ```
 
-With these types defined in `types.d.ts`, all components can directly use `UserContext` and `User` without importing them, ensuring consistency across the project.
+If you don't have `pnpm` installed, you can install it by running:
 
-### 2. Local Types Definition
-
-For types only relevant to a specific component or file, define them locally within that file to avoid cluttering global types.
-
-**Example**:
-
-```typescript
-// src/components/Profile.tsx
-
-type ProfileStats = {
-  posts: number;
-  followers: number;
-  following: number;
-};
-
-// Since the `User` type is defined in the global scope, no need to import here.
-const Profile = ({ user }: { user: User }) => {
-  const stats: ProfileStats = { posts: 50, followers: 100, following: 20 };
-  return (
-    <div>
-      <h1>{user.username}</h1>
-      <p>Posts: {stats.posts}</p>
-      <p>Followers: {stats.followers}</p>
-      <p>Following: {stats.following}</p>
-    </div>
-  );
-};
+```bash
+npm install --global corepack@latest
+corepack enable pnpm
 ```
 
-Here, `ProfileStats` is defined locally within `Profile.tsx` because it’s specific to this component.
+If any error occurs, please refer to the [official installation documentation](https://pnpm.io/installation).
 
-### 3. Interfaces and props
+#### 2. Firebase Configuration
 
-Interfaces are primarily used for objects that might be extended or combined with other types in the future. They are especially useful for defining the structure of `props` passed into components. This helps TypeScript enforce the correct structure and prevent errors when using the component.
+To run the application, you need to set up a Firebase project and configure it with the application. You can follow the steps below:
 
-**Example**:
+1. Create a new Firebase project on the [Firebase Console](https://console.firebase.google.com/).
+2. Add a new **web app** to the project (since we are using React).
+3. Copy the Firebase configuration values from the Firebase SDK snippet.
+4. Open `src/utils/firebase/firebaseConfig.ts` and replace line `10` to `17` with the copied values.
 
-```typescript
-// types.d.ts
-
-interface UserProfile {
-  id: string;
-  username: string;
-  email: string;
-  avatarUrl?: string;
-  bio?: string;
-}
-
-interface ProfileProps {
-  profile: UserProfile;
-  onFollow: (userId: string) => void;
-}
-```
-
-In this example, `UserProfile` defines the structure for a user's profile, and `ProfileProps` specifies the `props` expected by the `Profile` component, including the profile data and a follow function.
-
-**Usage in a Component**:
-
-```typescript
-// src/components/Profile.tsx
-
-const Profile = ({ profile, onFollow }: ProfileProps) => {
-  return (
-    <div>
-      <h1>{profile.username}</h1>
-      <p>{profile.bio}</p>
-      {profile.avatarUrl && <img src={profile.avatarUrl} alt={`${profile.username}'s avatar`} />}
-      <button onClick={() => onFollow(profile.id)}>Follow</button>
-    </div>
-  );
-};
-```
-
-Here, `Profile` receives `profile` and `onFollow` as `props`. TypeScript ensures that `profile` matches the `UserProfile` structure and `onFollow` is a function that takes a `userId` string as an argument. This makes the component’s expectations clear and prevents type-related bugs during development.
-
-### 4. `import type` Instead of `import`
-
-Using `import type` for importing types makes it clear that the import is used only for TypeScript type checking and won’t be included in the compiled JavaScript code. This can improve bundling and reduce unnecessary imports.
-
-**Example**:
-
-```typescript
-// src/hooks/useUser.ts
-
-import type { UserContextType } from "@/types";
-
-const useUser = () => {
-  // usage of UserContextType in the hook
-};
-```
-
-Here, `import type { UserContextType }` indicates that `UserContextType` is used only for type checking, not at runtime. This avoids additional runtime imports and helps with bundling efficiency.
-
-## 4. Zustand
-
-### 1. What is Zustand?
-
-`Zustand` is a lightweight state management library for React that uses a centralized store to manage global state. Unlike `Context`, which triggers a re-render of all components that consume it whenever the state changes, `zustand` only updates the components that subscribe to the specific state slice. This makes it more efficient and scalable for managing complex or frequently changing global states, such as user authentication data.
-
-### 2. How to Use Zustand
-
-#### Accessing Global State
-
-1. **Enable Zustand Store**: Zustand stores are imported and initialized once for the entire application. For example, the `user` store:
-
-   ```tsx
-   import { useUserStore } from "@/stores";
-
-   const App = () => {
-     const initializeAuthListener = useUserStore(
-       (state) => state.initializeAuthListener,
-     );
-
-     useEffect(() => {
-       const unsubscribe = initializeAuthListener();
-       return () => unsubscribe(); // Cleanup listener on unmount
-     }, [initializeAuthListener]);
-
-     return <>{/* App Components */}</>;
+   ```typescript
+   const firebaseConfig = {
+     apiKey: "",
+     authDomain: "",
+     projectId: "",
+     storageBucket: "",
+     messagingSenderId: "",
+     appId: "",
    };
    ```
 
-2. **Access State in Components**: Use zustand hooks to fetch only the state you need. This ensures efficient re-rendering.
+5. Enable the **Firestore**, **Authentication**, and **Hosting** services in the Firebase console.
 
-   ```tsx
-   import { useUserStore } from "@/stores";
+#### 3. `.env` Configuration
 
-   const MyComponent = () => {
-     const user = useUserStore((state) => state.user);
-     const loading = useUserStore((state) => state.loading);
+We have a `.env` file in the root directory. This file is used to store the only 2 environment variables that are used in the application.
 
-     return user ? (
-       <div>
-         <h1>
-           Welcome,
-           {user.displayName}
-         </h1>
-         <button onClick={() => useUserStore.getState().logout()}>
-           Sign Out
-         </button>
-       </div>
-     ) : loading ? (
-       <p>Loading...</p>
-     ) : (
-       <button
-         onClick={() =>
-           useUserStore
-             .getState()
-             .login("donor", () => console.log("Logged in"))
-         }
-       >
-         Sign In
-       </button>
-     );
-   };
-   ```
+> ⚠️ **Warning**
+>
+> **This is not a secure env file since its for frontend only.**
+>
+> **Do not include trailing slashes in the URLs.**
 
----
+1. `VITE_BASE_URL`: The base URL of the frontend application (used for QR code generation).
+2. `VITE_API_URL`: The base URL of the backend API (used for sending SMS messages).
 
-#### Updating State
+### Installation
 
-To update the user's profile or other states, zustand provides centralized actions that automatically update Firebase and sync the changes with the store:
+#### 1. Dependencies Installation (with pnpm)
 
-```tsx
-import useUserStore from "@/stores/useUserStore";
+Run the following command to install all dependencies (in the root directory):
 
-const MyComponent = () => {
-  const updateProfile = useUserStore((state) => state.updateProfile);
-
-  const handleUpdate = () => {
-    updateProfile({ displayName: "New Name" }); // Updates profile in Firebase and zustand
-  };
-
-  return <button onClick={handleUpdate}>Update Profile</button>;
-};
+```bash
+pnpm install
 ```
+
+#### 2. Firebase connection
+
+Run the following command to connect the Firebase project with the application:
+
+```bash
+pnpm firebase login
+```
+
+Then use the following command to deploy the Firestore database rules:
+
+```bash
+pnpm firebase deploy --only firestore
+```
+
+#### 3. Backend
+
+Go to [backend README](backend/README.md) to set up the backend. The backend is required for the sending emergency SMS feature (not required for development).
+
+### Development
+
+To start the development server, run:
+
+```bash
+pnpm dev
+```
+
+And open [http://localhost:5173/](http://localhost:5173/) in your browser.
+
+### Production (Preview)
+
+To build the production version, run:
+
+```bash
+pnpm build
+```
+
+And to start the production server, run:
+
+```bash
+pnpm start
+```
+
+### Deploy to Firebase Hosting (Only do this after the production build)
+
+To deploy the application to Firebase Hosting, run:
+
+> ⚠️ Make sure you have already connected the Firebase project with the application.
+>
+> ⚠️ Make sure you have already built the production version.
+
+```bash
+pnpm firebase deploy --only hosting
+```
+
+### Linting
+
+> **Note**: This step is only for developing purpose.
+
+Auto linting on save and commit is already set up. You can also run the following command to lint the code:
+
+```bash
+pnpm run lint:fix
+```
+
+## Dev Team Members
+
+Thanks goes to all our dev team members who contributed to this project. 🎉
+
+![Contributors](https://contrib.rocks/image?repo=394-w25/SafePassage)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<!-- Badges / Links -->
+
+[eslint-badge]: https://img.shields.io/badge/eslint-4B32C3?logo=eslint&logoColor=white
+[eslint-link]: https://www.npmjs.com/package/eslint-config-zl-asica
+[firebase-badge]: https://img.shields.io/badge/-Firebase-FFCA28?logo=firebase&logoColor=black
+[firebase-link]: https://firebase.google.com/
+[license-badge]: https://img.shields.io/github/license/394-w25/SafePassage
+[license-link]: https://github.com/394-w25/SafePassage/blob/main/LICENSE
+[node-badge]: https://img.shields.io/badge/node%3E=20.00-339933?logo=node.js&logoColor=white
+[node-link]: https://nodejs.org/
+[pnpm-badge]: https://img.shields.io/github/package-json/packageManager/394-w25/SafePassage?label=&logo=pnpm&logoColor=fff&color=F69220
+[pnpm-link]: https://pnpm.io/
+[react-badge]: https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB
+[react-link]: https://react.dev/
+[vite-badge]: https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff
+[vite-link]: https://vitejs.dev/
+[vitest-badge]: https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=fff
+[vitest-link]: https://vitejs.dev/guide/

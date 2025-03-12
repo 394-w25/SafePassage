@@ -7,7 +7,12 @@ interface QRCodeProps {
 }
 
 const QRCode = ({ uid }: QRCodeProps) => {
-  const qrCodeUrl = `https://safepassage.zla.app/medical/${uid}`
+  const BASE_URL = import.meta.env.VITE_BASE_URL as string
+  if (BASE_URL === undefined || typeof BASE_URL !== 'string' || BASE_URL === '') {
+    throw new Error('VITE_BASE_URL is not defined')
+  }
+
+  const qrCodeUrl = `${BASE_URL}/medical/${uid}`
   const qrRef = useRef<HTMLCanvasElement>(null)
 
   const handleDownload = () => {

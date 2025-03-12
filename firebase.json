@@ -8,20 +8,10 @@
         "headers": [
           { "key": "Cache-Control", "value": "public, max-age=86400" }
         ]
-      },
-      {
-        "source": "/manifest.webmanifest",
-        "headers": [
-          { "key": "Cache-Control", "value": "public, max-age=86400" }
-        ]
       }
     ],
     "rewrites": [
       { "source": "/robots.txt", "destination": "/robots.txt" },
-      {
-        "source": "/manifest.webmanifest",
-        "destination": "/manifest.webmanifest"
-      },
       { "source": "/favicon.ico", "destination": "/favicon.ico" },
       { "source": "/favicon.svg", "destination": "/favicon.svg" },
       {
@@ -38,5 +28,8 @@
       },
       { "source": "/**", "destination": "/index.html" }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }
