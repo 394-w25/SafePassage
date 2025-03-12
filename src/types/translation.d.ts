@@ -25,6 +25,7 @@ interface TranslationContents {
   seconds: string
   cancelButton: string
   sendNowButton: string
+  emergencySent: string
   from: string
 }
 

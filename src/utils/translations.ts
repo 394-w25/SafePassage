@@ -29,6 +29,7 @@ export const translations: Translation = {
     seconds: 's',
     cancelButton: 'Cancel',
     sendNowButton: 'Send Now',
+    emergencySent: 'EMERGENCY ALERT SENT',
     from: 'From:',
   },
   CN: {
@@ -36,7 +37,7 @@ export const translations: Translation = {
     changeLanguageSuccess: '语言已更改',
     MedicalProvider: {
       title: '医疗提供者视图',
-      nameLabel: '名字:',
+      nameLabel: '姓名:',
       ageLabel: '年龄:',
     },
     HealthHistory: '健康史',
@@ -56,6 +57,7 @@ export const translations: Translation = {
     seconds: '秒',
     cancelButton: '取消',
     sendNowButton: '立即发送',
+    emergencySent: '紧急信息已发送',
     from: '来自:',
   },
 }

@@ -1,6 +1,4 @@
-import { useLanguageStore } from '@/stores'
 import { calculateAge } from '@/utils/onboardingUtils'
-import { translations } from '@/utils/translations'
 import { Avatar, Box, Card, CardContent, Divider, Grid2 as Grid, Typography } from '@mui/material'
 
 interface MainInfoProps {
@@ -13,7 +11,6 @@ interface MainInfoProps {
 
 const MainInfo = ({ displayName, email, timeInfo, profilePic, healthData }: MainInfoProps) => {
   const age = calculateAge(healthData?.dateOfBirth)
-  const language = useLanguageStore(state => state.language)
   const medicationCount = healthData?.medications?.length ?? 0
   const allergiesCount = healthData?.healthInfos?.allergies?.length ?? 0
   const pastSurgeriesCount = healthData?.healthInfos?.pastSurgeries?.length ?? 0
