@@ -16,7 +16,7 @@ interface BasicInfo {
 
 interface HealthHistoryContextType {
   basicInfo: BasicInfo
-  updateBasicInfo: (name?: string, dateOfBirth?: Date, homeCountry?: string, homeCity?: string, homeTimezone?: string) => void
+  updateBasicInfo: (name?: string, dateOfBirth?: string, homeCountry?: string, homeCity?: string, homeTimezone?: string) => void
   healthInfos: HealthInfos
   updateHealthInfos: (newHealthInfos: Partial<HealthInfos>) => void
   contacts: Contact[]
@@ -59,10 +59,10 @@ export const HealthHistoryProvider = ({ children }: { children: ReactNode }) => 
 
   const [medications, setMedications] = useState<Medication[]>(user?.healthData?.medications ?? [])
 
-  const updateBasicInfo = (name?: string, dateOfBirth?: Date, homeCountry?: string, homeCity?: string, homeTimezone?: string) => {
+  const updateBasicInfo = (name?: string, dateOfBirth?: string, homeCountry?: string, homeCity?: string, homeTimezone?: string) => {
     setBasicInfo(prev => ({
       name: name ?? prev.name,
-      dateOfBirth: dateOfBirth?.toISOString() ?? prev.dateOfBirth,
+      dateOfBirth: dateOfBirth ?? prev.dateOfBirth,
       homeCountry: homeCountry ?? prev.homeCountry,
       homeCity: homeCity ?? prev.homeCity,
       homeTimezone: homeTimezone ?? prev.homeTimezone,
