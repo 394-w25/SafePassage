@@ -1,3 +1,5 @@
+import { useLanguageStore } from '@/stores'
+import { translations } from '@/utils/translations'
 import { Card, CardContent, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
 import dayjs from 'dayjs'
 import { Fragment } from 'react'
@@ -7,6 +9,7 @@ interface MedicationInfosProps {
 }
 
 const MedicationInfos = ({ medications }: MedicationInfosProps) => {
+  const language = useLanguageStore(state => state.language)
   // time is in HH:mm format, convert to HH:mm AM/PM
   const formatTime = (time: string | undefined) => {
     if (time === undefined) {
@@ -20,7 +23,7 @@ const MedicationInfos = ({ medications }: MedicationInfosProps) => {
     <Card elevation={2} sx={{ borderRadius: 2, mt: 3 }}>
       <CardContent>
         <Typography variant="h6" fontWeight="bold" sx={{ color: 'primary.main', mb: 1.2 }}>
-          Medication Infos
+          {translations[language].medicationInfos}
         </Typography>
 
         {Array.isArray(medications) && medications.length > 0

@@ -1,5 +1,8 @@
 import { AddFamilyContacts, BottomController, InputHealthHistory, InputMedications } from '@/components/Onboarding'
 import { HealthHistoryProvider } from '@/context'
+import { useLanguageStore } from '@/stores'
+import { translations } from '@/utils/translations'
+
 import {
   Box,
   Container,
@@ -9,11 +12,11 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 
-const steps = ['Health History', 'Medications', 'Emergency Contacts']
-
 const Onboarding = () => {
   const [activeStep, setActiveStep] = useState(0)
+  const language = useLanguageStore(state => state.language)
 
+  const steps = [translations[language].HealthHistory, translations[language].Medications, translations[language].EmergencyContacts]
   return (
     <HealthHistoryProvider>
       <Container maxWidth="sm" sx={{ py: 4, px: 1 }}>

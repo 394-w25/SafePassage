@@ -1,4 +1,6 @@
+import { useLanguageStore } from '@/stores'
 import { calculateAge } from '@/utils/onboardingUtils'
+import { translations } from '@/utils/translations'
 import { Avatar, Box, Card, CardContent, Divider, Grid2 as Grid, Typography } from '@mui/material'
 
 interface MainInfoProps {
@@ -11,7 +13,7 @@ interface MainInfoProps {
 
 const MainInfo = ({ displayName, email, timeInfo, profilePic, healthData }: MainInfoProps) => {
   const age = calculateAge(healthData?.dateOfBirth)
-
+  const language = useLanguageStore(state => state.language)
   const medicationCount = healthData?.medications?.length ?? 0
   const allergiesCount = healthData?.healthInfos?.allergies?.length ?? 0
   const pastSurgeriesCount = healthData?.healthInfos?.pastSurgeries?.length ?? 0
@@ -62,7 +64,7 @@ const MainInfo = ({ displayName, email, timeInfo, profilePic, healthData }: Main
           <Grid container spacing={2} justifyContent="center">
             <Grid size={{ xs: 6 }}>
               <Typography variant="body2" color="text.secondary">
-                Allergies
+                {translations[language].healthInfos.allergies}
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 {allergiesCount}

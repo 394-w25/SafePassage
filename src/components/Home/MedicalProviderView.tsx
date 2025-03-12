@@ -43,18 +43,18 @@ const MedicalProviderView = ({
           </Avatar>
           <Box>
             <Typography variant="body1">
-              Name:
+              {translations[language].MedicalProvider.nameLabel}
               {' '}
               {name || 'N/A'}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Age:
+              {translations[language].MedicalProvider.ageLabel}
               {' '}
               {calculateAge(dateOfBirth)}
             </Typography>
             {timeInfo !== undefined && (
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                From:
+                {translations[language].from}
                 {' '}
                 {timeInfo.homeCity}
                 {', '}
@@ -69,7 +69,7 @@ const MedicalProviderView = ({
           (items as string[])?.length > 0 && (
             <Box key={key} sx={{ mb: 2 }}>
               <Typography fontWeight="bold" sx={{ mb: 1, color: 'primary.main' }}>
-                {formatTitleCase(key)}
+                {formatTitleCase(translations[language].healthInfos[key])}
               </Typography>
               <List dense sx={{ bgcolor: '#FAF9F6', borderRadius: 1, p: 1 }}>
                 {(items as string[]).map(item => (
