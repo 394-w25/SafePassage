@@ -20,36 +20,27 @@ jobs:
         uses: actions/checkout@v4
 
       # Step 2: Setup Node.js and enable caching
-      - name: 🛠️ Setup Node
-        uses: actions/setup-node@v4
+      - name: 📦 Set up Node.js and pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: "lts/*"
-          cache: npm
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
 
-      # Step 3: Restore dependencies cache
-      - name: 📂 Restore npm cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-cache-
-
-      # Step 4: Install dependencies
-      - name: 📂 Install Packages
-        run: npm ci
-
-      # Step 5: Run linter
+      # Step 3: Run linter
       - name: 🚨 Lint Code
-        run: npm run lint:fix
+        run: pnpm run lint:fix
 
-      # Step 6: Build the project
+      # Step 4: Build the project
       - name: 🧱 Build Project
-        run: npm run build
+        env:
+          VITE_BASE_URL: ${{ vars.VITE_BASE_URL }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: pnpm run build
 
-      # Step 7: Deploy to Firebase
+      # Step 5: Deploy to Firebase
       - name: 🚀 Deploy to Firebase
         if: success()
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: npm run deploy -- --non-interactive
+        run: pnpm run deploy -- --non-interactive

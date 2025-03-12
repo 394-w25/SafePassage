@@ -1,0 +1,34 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default: Deny all access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Rules for user documents
+    match /users/{userId} {
+      // Allow anyone (even unauthenticated users) to read user data
+      allow read: if true;
+
+      // Allow users to update only their own data
+      allow update: if request.auth != null && request.auth.uid == userId;
+
+      // Allow users to create their own user document during registration
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // Prevent unauthorized deletion of user documents
+      allow delete: if false;
+    }
+    
+    // Rules for tokens collection
+    match /tokens/{tokenId} {
+      // Allow anyone (even unauthenticated users) to read token data
+      allow read: if true;
+      
+      // Deny all write operations
+      allow write: if false;
+    }
+  }
+}
