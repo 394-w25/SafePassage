@@ -10,6 +10,7 @@ interface Bindings {
   TWILIO_AUTH_TOKEN: string
   TWILIO_PHONE_NUMBER: string
   AUTH_TOKEN: string
+  FRONTEND_URL: string
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -18,10 +19,10 @@ app.use(logger())
 
 // CORS only allow from zla.app
 app.use(cors({
-  origin: origin => (
-    origin.endsWith('.zla.app') || origin.startsWith('http://localhost:')
+  origin: (origin, c: Context) => (
+    origin.endsWith((c.env as Bindings).FRONTEND_URL) || origin.startsWith('http://localhost:')
       ? origin
-      : 'https://safepassage.zla.app/'),
+      : (c.env as Bindings).FRONTEND_URL),
 }))
 
 app.use('/messages', bearerAuth({ verifyToken(token, c: Context) {

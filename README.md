@@ -19,6 +19,7 @@
   - [File Structure and Logic](#file-structure-and-logic)
   - [Getting Started](#getting-started)
     - [Preparation](#preparation)
+      - [0. Clone this Repo and open in VS Code](#0-clone-this-repo-and-open-in-vs-code)
       - [1. Node.js Environment Setup](#1-nodejs-environment-setup)
       - [2. Firebase Configuration](#2-firebase-configuration)
       - [3. `.env` Configuration](#3-env-configuration)
@@ -28,14 +29,16 @@
       - [3. Backend](#3-backend)
     - [Development](#development)
     - [Production (Preview)](#production-preview)
-    - [Deploy to Firebase Hosting (Only do this after the production build)](#deploy-to-firebase-hosting-only-do-this-after-the-production-build)
+    - [Deploy to Firebase Hosting](#deploy-to-firebase-hosting)
     - [Linting](#linting)
   - [Dev Team Members](#dev-team-members)
   - [License](#license)
 
 ## Project Description
 
-SafePassage is a web application that allows users with medical conditions who want to traveling abroad to generate a QR code that contains their medical information. This QR code can be scanned by medical professionals in the destination country to access the user's medical information in translated language. The application also auto-send SMS messages to the user's emergency contacts when the emergency medical QR code is scanned.
+SafePassage is a React based web application that allows users with medical conditions who want to traveling abroad to generate a QR code that contains their medical information. This QR code can be scanned by medical professionals in the destination country to access the user's medical information in translated language. The application also auto-send SMS messages to the user's emergency contacts when the emergency medical QR code is scanned.
+
+See [Issues](https://github.com/394-w25/SafePassage/issues) and [Pull Requests](https://github.com/394-w25/SafePassage/pulls) for more development progress and details.
 
 ## File Structure and Logic
 
@@ -52,23 +55,25 @@ This project uses a component-based structure with a focus on clear separation o
 ├── package.json               # Dependencies
 ├── pnpm-lock.yaml             # pnpm lock file
 └── src                        # Source code
-    ├── App.tsx                # Main application component
-    ├── index.tsx              # Entry point of the application
-    ├── routes.tsx             # Application routes
-    ├── global.css             # Global styles
-    ├── components             # Shared components and features
-    │   ├── common             # Common components used across the app
-    │   ├── Home               # Home page components
-    │   ├── Me                 # Me page components
-    │   └── ...                # Other pages' components
-    ├── stores                 # Zustand related global state management
-    ├── hooks                  # Custom hooks for specialized logic
-    ├── pages                  # Application pages
-    ├── utils                  # Utility functions and Firebase configurations
-    │   ├── firebase           # Firebase configurations
-    │   └── ...
-    ├── contexts               # React context providers
-    └── types                  # Global types define here (such as schemas).
+│   ├── App.tsx                # Main application component
+│   ├── index.tsx              # Entry point of the application
+│   ├── routes.tsx             # Application routes
+│   ├── global.css             # Global styles
+│   ├── components             # Shared components and features
+│   │   ├── common             # Common components used across the app
+│   │   ├── Home               # Home page components
+│   │   ├── Me                 # Me page components
+│   │   └── ...                # Other pages' components
+│   ├── stores                 # Zustand related global state management
+│   ├── hooks                  # Custom hooks for specialized logic
+│   ├── pages                  # Application pages
+│   ├── utils                  # Utility functions and Firebase configurations
+│   │   ├── firebase           # Firebase configurations
+│   │   └── ...
+│   ├── contexts               # React context providers
+│   └── types                  # Global types define here (such as schemas).
+└── backend                    # Backend for sending emergency SMS (See backend README)
+    └── README.md              # Backend documentation
 ```
 
 The main components and utilities are organized under `src/components` and `src/utils`.
@@ -76,6 +81,20 @@ The main components and utilities are organized under `src/components` and `src/
 ## Getting Started
 
 ### Preparation
+
+#### 0. Clone this Repo and open in VS Code
+
+```bash
+git clone https://github.com/394-w25/SafePassage.git
+```
+
+We highly recommend using [Visual Studio Code](https://code.visualstudio.com/) as the IDE for this project.
+
+> We have awesome extensions and configurations set up for this project in VSCode.
+>
+> Auto-formatting, linting, and lots other helpful features are already set up.
+
+Once you open this project (SafePassage) inside VSCode, it will prompt you with a message saying that some recommended extensions are required for this project. Install them.
 
 #### 1. Node.js Environment Setup
 
@@ -117,6 +136,14 @@ To run the application, you need to set up a Firebase project and configure it w
    ```
 
 5. Enable the **Firestore**, **Authentication**, and **Hosting** services in the Firebase console.
+6. Manually add a value to the Firestore database for Bearer Auth Token to the backend.
+
+   ```plaintext
+   Collection: `tokens`
+   Document: `message`
+   Field: `token`
+   Value: `YOUR_AUTH_TOKEN(SAME_AS_BACKEND_AUTH_TOKEN)`
+   ```
 
 #### 3. `.env` Configuration
 
@@ -183,7 +210,9 @@ And to start the production server, run:
 pnpm start
 ```
 
-### Deploy to Firebase Hosting (Only do this after the production build)
+### Deploy to Firebase Hosting
+
+Only do this after the production build.
 
 To deploy the application to Firebase Hosting, run:
 
@@ -192,7 +221,7 @@ To deploy the application to Firebase Hosting, run:
 > ⚠️ Make sure you have already built the production version.
 
 ```bash
-pnpm firebase deploy --only hosting
+pnpm run deploy
 ```
 
 ### Linting
@@ -208,6 +237,8 @@ pnpm run lint:fix
 ## Dev Team Members
 
 Thanks goes to all our dev team members who contributed to this project. 🎉
+
+Any issue? Contact @ZL-Asica.
 
 ![Contributors](https://contrib.rocks/image?repo=394-w25/SafePassage)
 
