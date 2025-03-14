@@ -1,4 +1,5 @@
 import { useLanguageStore } from '@/stores'
+import emergencyMessageUtil from '@/utils/emergencyMessageUtil'
 import { getUIDProfile } from '@/utils/firebase'
 import { translations } from '@/utils/translations'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -18,19 +19,32 @@ export const useEmergencyAlert = (countDown: number = 10) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const hasTriggeredRef = useRef<boolean>(false)
 
-  const handleEmergency = useCallback(() => {
+  const handleEmergency = useCallback(async () => {
     if (!hasTriggeredRef.current) {
       hasTriggeredRef.current = true
-      toast.error(`⚠️ ${translations[language].emergencySent}!`, { duration: 8000 })
+      try {
+        const allEmergencyPhoneNumbers = userData?.healthData?.contacts?.map(contact => contact.phone) ?? []
+        if (allEmergencyPhoneNumbers.length === 0) {
+          toast.error(`⚠️ ${translations[language].errors.noEmergencyContacts}`)
+          return
+        }
+
+        await emergencyMessageUtil(allEmergencyPhoneNumbers, userData?.name ?? 'User')
+        toast.success(`⚠️ ${translations[language].emergencySent}!`, { duration: 8000 })
+      }
+      catch (error) {
+        toast.error(error instanceof Error ? error.message : translations[language].errors.unknownError)
+      }
     }
-  }, [language])
+  }, [userData, language])
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const data = await getUIDProfile(uid)
         if (!data) {
-          throw new Error('User data not found')
+          toast.error(`⚠️ ${translations[language].errors.userNotFound}`)
+          throw new Error(`${uid} User data not found`)
         }
         setUserData(data)
       }
@@ -44,7 +58,7 @@ export const useEmergencyAlert = (countDown: number = 10) => {
     }
 
     void fetchUserData()
-  }, [uid, navigate])
+  }, [uid, navigate, language])
 
   useEffect(() => {
     if (userData) {
@@ -56,13 +70,13 @@ export const useEmergencyAlert = (countDown: number = 10) => {
         clearInterval(timerRef.current)
       }
 
-      timerRef.current = setInterval(() => {
+      timerRef.current = setInterval(async () => {
         setCountdown((prev) => {
           if (prev === 1) {
             clearInterval(timerRef.current!)
             timerRef.current = null
             setShowPopup(false)
-            handleEmergency()
+            void handleEmergency()
             return 0
           }
           return prev - 1
@@ -78,13 +92,13 @@ export const useEmergencyAlert = (countDown: number = 10) => {
     }
   }, [userData, countDown, handleEmergency])
 
-  const handleSendNow = () => {
+  const handleSendNow = async () => {
     setShowPopup(false)
     if (timerRef.current) {
       clearInterval(timerRef.current)
       timerRef.current = null
     }
-    handleEmergency()
+    await handleEmergency()
   }
 
   const handleCancel = () => {

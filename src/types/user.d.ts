@@ -59,3 +59,8 @@ interface UserProfile {
   timeInfo?: TimeInfo
   trips?: Trip[]
 }
+
+interface TokenDocument {
+  token: string
+
+}

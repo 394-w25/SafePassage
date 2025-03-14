@@ -27,6 +27,11 @@ interface TranslationContents {
   sendNowButton: string
   emergencySent: string
   from: string
+  errors: {
+    userNotFound: string
+    unknownError: string
+    noEmergencyContacts: string
+  }
 }
 
 type Translation = Record<Language, TranslationContents>

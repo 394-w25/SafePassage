@@ -5,11 +5,9 @@ export default antfu(
     ignores: [
       'README.md',
       'public/*',
-      'backend/*',
     ],
-    react: true,
     typescript: {
-      tsconfigPath: 'tsconfig.app.json',
+      tsconfigPath: 'tsconfig.json',
     },
     formatters: {
       css: true,
@@ -17,10 +15,5 @@ export default antfu(
       markdown: 'prettier',
     },
     lessOpinionated: true,
-  },
-  {
-    rules: {
-      'ts/no-misused-promises': 'off',
-    },
   },
 )

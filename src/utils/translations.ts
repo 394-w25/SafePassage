@@ -31,6 +31,11 @@ export const translations: Translation = {
     sendNowButton: 'Send Now',
     emergencySent: 'EMERGENCY ALERT SENT',
     from: 'From:',
+    errors: {
+      userNotFound: 'User data not found',
+      unknownError: 'Unknown error',
+      noEmergencyContacts: 'No emergency contacts found',
+    },
   },
   CN: {
     changeLanguage: '更改语言',
@@ -59,5 +64,10 @@ export const translations: Translation = {
     sendNowButton: '立即发送',
     emergencySent: '紧急信息已发送',
     from: '来自:',
+    errors: {
+      userNotFound: '未找到用户数据',
+      unknownError: '未知错误',
+      noEmergencyContacts: '未找到紧急联系人',
+    },
   },
 }

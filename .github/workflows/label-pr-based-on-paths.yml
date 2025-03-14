@@ -33,6 +33,7 @@ jobs:
               types: '17becf',        // Cyan - Types Related
               context: 'e377c2',      // Magenta - Context Related
               deps: '8c564b',         // Brown - Dependencies Related
+              backend: 'bcbd22',      // Olive - Backend Related
             };
 
             const labels = new Set();
@@ -67,6 +68,9 @@ jobs:
               }
               if (file.filename.startsWith('src/types') || file.filename.endsWith('.d.ts')) {
                 labels.add('types');
+              }
+              if (file.filename.startsWith('backend/')) {
+                labels.add('backend');
               }
             });
 

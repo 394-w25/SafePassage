@@ -55,23 +55,25 @@ This project uses a component-based structure with a focus on clear separation o
 ├── package.json               # Dependencies
 ├── pnpm-lock.yaml             # pnpm lock file
 └── src                        # Source code
-    ├── App.tsx                # Main application component
-    ├── index.tsx              # Entry point of the application
-    ├── routes.tsx             # Application routes
-    ├── global.css             # Global styles
-    ├── components             # Shared components and features
-    │   ├── common             # Common components used across the app
-    │   ├── Home               # Home page components
-    │   ├── Me                 # Me page components
-    │   └── ...                # Other pages' components
-    ├── stores                 # Zustand related global state management
-    ├── hooks                  # Custom hooks for specialized logic
-    ├── pages                  # Application pages
-    ├── utils                  # Utility functions and Firebase configurations
-    │   ├── firebase           # Firebase configurations
-    │   └── ...
-    ├── contexts               # React context providers
-    └── types                  # Global types define here (such as schemas).
+│   ├── App.tsx                # Main application component
+│   ├── index.tsx              # Entry point of the application
+│   ├── routes.tsx             # Application routes
+│   ├── global.css             # Global styles
+│   ├── components             # Shared components and features
+│   │   ├── common             # Common components used across the app
+│   │   ├── Home               # Home page components
+│   │   ├── Me                 # Me page components
+│   │   └── ...                # Other pages' components
+│   ├── stores                 # Zustand related global state management
+│   ├── hooks                  # Custom hooks for specialized logic
+│   ├── pages                  # Application pages
+│   ├── utils                  # Utility functions and Firebase configurations
+│   │   ├── firebase           # Firebase configurations
+│   │   └── ...
+│   ├── contexts               # React context providers
+│   └── types                  # Global types define here (such as schemas).
+└── backend                    # Backend for sending emergency SMS (See backend README)
+    └── README.md              # Backend documentation
 ```
 
 The main components and utilities are organized under `src/components` and `src/utils`.
